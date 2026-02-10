@@ -17,7 +17,9 @@ public class TSmmParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		TRASH=1, INT_CONSTANT=2, ONE_LINE_COMMENTS=3;
+		TRASH=1, INT_CONSTANT=2, REAL_CONSTANT=3, REAL_PART=4, MANTISA_PART=5, 
+		ONE_LINE_COMMENT=6, MORE_LINES_COMMENT=7, ID=8, CHAR_CONSTANT=9, MACRO_LETTER=10, 
+		MACRO_DIGIT=11;
 	public static final int
 		RULE_program = 0;
 	private static String[] makeRuleNames() {
@@ -29,12 +31,15 @@ public class TSmmParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
+			null, null, null, null, null, null, null, null, null, "'A'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "TRASH", "INT_CONSTANT", "ONE_LINE_COMMENTS"
+			null, "TRASH", "INT_CONSTANT", "REAL_CONSTANT", "REAL_PART", "MANTISA_PART", 
+			"ONE_LINE_COMMENT", "MORE_LINES_COMMENT", "ID", "CHAR_CONSTANT", "MACRO_LETTER", 
+			"MACRO_DIGIT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -119,7 +124,7 @@ public class TSmmParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0003\u0005\u0002\u0000\u0007\u0000\u0001\u0000\u0001\u0000"+
+		"\u0004\u0001\u000b\u0005\u0002\u0000\u0007\u0000\u0001\u0000\u0001\u0000"+
 		"\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0003\u0000\u0002\u0001"+
 		"\u0000\u0000\u0000\u0002\u0003\u0005\u0002\u0000\u0000\u0003\u0001\u0001"+
 		"\u0000\u0000\u0000\u0000";
