@@ -22,12 +22,12 @@ public class LexerTest {
                 case TSmmLexer.INT_CONSTANT:
                     semanticValue = LexerHelper.lexemeToInt(token.getText());
                     break;
-            /*    case TSmmLexer.CHAR_CONSTANT:
+                case TSmmLexer.CHAR_CONSTANT:
                     semanticValue = LexerHelper.lexemeToChar(token.getText());
                     break;
                 case TSmmLexer.REAL_CONSTANT:
                     semanticValue = LexerHelper.lexemeToReal(token.getText());
-                    break;*/
+                    break;
                 default:
                     semanticValue = token.getText();
             }

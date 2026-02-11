@@ -31,7 +31,6 @@ public class TSmmParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, "'A'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -96,6 +95,8 @@ public class TSmmParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class ProgramContext extends ParserRuleContext {
 		public TerminalNode INT_CONSTANT() { return getToken(TSmmParser.INT_CONSTANT, 0); }
+		public TerminalNode REAL_CONSTANT() { return getToken(TSmmParser.REAL_CONSTANT, 0); }
+		public TerminalNode CHAR_CONSTANT() { return getToken(TSmmParser.CHAR_CONSTANT, 0); }
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -105,11 +106,20 @@ public class TSmmParser extends Parser {
 	public final ProgramContext program() throws RecognitionException {
 		ProgramContext _localctx = new ProgramContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_program);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(2);
-			match(INT_CONSTANT);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 524L) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -125,9 +135,9 @@ public class TSmmParser extends Parser {
 
 	public static final String _serializedATN =
 		"\u0004\u0001\u000b\u0005\u0002\u0000\u0007\u0000\u0001\u0000\u0001\u0000"+
-		"\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0003\u0000\u0002\u0001"+
-		"\u0000\u0000\u0000\u0002\u0003\u0005\u0002\u0000\u0000\u0003\u0001\u0001"+
-		"\u0000\u0000\u0000\u0000";
+		"\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0001\u0002\u0000\u0002\u0003"+
+		"\t\t\u0003\u0000\u0002\u0001\u0000\u0000\u0000\u0002\u0003\u0007\u0000"+
+		"\u0000\u0000\u0003\u0001\u0001\u0000\u0000\u0000\u0000";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

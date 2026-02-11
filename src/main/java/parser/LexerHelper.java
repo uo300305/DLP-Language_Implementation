@@ -15,13 +15,23 @@ public class LexerHelper {
 	}
 
 	public static char lexemeToChar(String str) {
-		try {
-			return str.charAt(0);
+
+		// Quitamos las comillas
+		String content = str.substring(1, str.length() - 1);
+
+		// Caso normal
+		if (content.charAt(0) != '\\') {
+			return content.charAt(0);
 		}
-		catch(IllegalFormatConversionException e) {
-			System.out.println(e);
+
+		// Caso escapado
+		switch(content){
+			case("\\n"): return '\n';
+			case("\\t"): return '\t';
 		}
-		return '0';
+
+		// Caso ASCII
+		return (char) Integer.parseInt(content.substring(1));
 	}
 
 	public static double lexemeToReal(String str) {

@@ -6,13 +6,12 @@ Elementos:
   Comentarios con // hasta el final de l�nea
   Comentarios con varias l�neas (de /* hasta */)
   Literales Enteros sin signo
-
   Identificadores que comienzan con una letra o _ y seguidos de letra, d�gito o _
-
   Literales Reales con punto decimal
 	12.3, 2., .34
   Literales Reales con formato exponente
 	34.12E-3, 3e3, 2e+5
+
   Literales car�cter entre '',
   Literales car�cter mediante codigo ASCII '\126'
   Dos caracteres especiales '\n' y '\t'
