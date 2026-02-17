@@ -6,8 +6,8 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/src/main/java/parser/TSmm.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\USUARIO\Desktop\wp\3.2\DLP\DLP_LenguageImplementation\src\main\java" />
-          <option name="libDir" value="C:\Users\USUARIO\Desktop\wp\3.2\DLP\DLP_LenguageImplementation\src\main\java" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="parser" />
           <option name="language" value="" />
