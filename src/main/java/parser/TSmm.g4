@@ -1,33 +1,33 @@
 grammar TSmm;	
 
 // Forzamos a que pare en el EOF
-program: (variableDefinition | functionDefinition)* 'function' 'main' '(' ')' ':' 'void' '{' variableDefinition* sentence* '}' EOF
+program: (variable_definition | function_definition)* 'function' 'main' '(' ')' ':' 'void' '{' variable_definition* sentence* '}' EOF
        ;
 
-variableDefinition: 'let' idList ':' type ';'
+variable_definition: 'let' id_list ':' type ';'
                     ;
 
 // Debe haber una función main en ultimo lugar
-functionDefinition: 'function' ID '(' parameterList? ')' ':' type '{' variableDefinition* sentence* '}'
+function_definition: 'function' ID '(' parameter_list? ')' ':' type '{' variable_definition* sentence* '}'
                     ;
 
  type: 'void'
        |'function'
        | '['INT_CONSTANT']' type
-       | '['variableDefinition+']'
-       | simpleType
+       | '['variable_definition+']'
+       | simple_type
        ;
 
-simpleType: 'int'
+simple_type: 'int'
     | 'number'
     | 'char'
     ;
 
-sentence: ID '('expressionList?')' ';'
-        | 'log' expressionList ';'
+sentence: ID '('expression_list?')' ';'
+        | 'log' expression_list ';'
         | 'while' '(' expression ')' body
         | expression '=' expression ';'
-        | 'input' expressionList ';'
+        | 'input' expression_list ';'
         | 'if' '(' expression ')' body ('else' body)?
         | 'return' expression ';'
        ;
@@ -43,8 +43,8 @@ expression: INT_CONSTANT
             | '('expression')'
             | expression'['expression']'
             | expression'.'ID
-            | ID '('expressionList?')'
-            | '(' expression 'as' simpleType ')'
+            | ID '('expression_list?')'
+            | '(' expression 'as' simple_type ')'
             |'-' expression
             | '!' expression
             | expression ('*'|'/'|'%') expression
@@ -53,16 +53,16 @@ expression: INT_CONSTANT
             | expression ('&&'|'||') expression
             ;
 
-expressionList: expression
-            | expression ',' expressionList
+expression_list: expression
+            | expression ',' expression_list
             ;
 
-idList: ID
-    | ID ',' idList
+id_list: ID
+    | ID ',' id_list
     ;
 
-parameterList: ID ':' simpleType
-            | ID ':' simpleType ',' parameterList
+parameter_list: ID ':' simple_type
+            | ID ':' simple_type ',' parameter_list
             ;
 
 // ----------------------------------------------------------------
