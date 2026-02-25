@@ -1,68 +1,91 @@
-grammar TSmm;	
+grammar TSmm;
+@header{
+    import ast.expressions.*;
+    import ast.common.*;
+    import ast.definitions.*;
+    import ast.statements.*;
+    import ast.types.*;
+}
 
 // Forzamos a que pare en el EOF
-program: (variable_definition | function_definition)* 'function' 'main' '(' ')' ':' 'void' '{' variable_definition* sentence* '}' EOF
+program returns [Program ast] locals[List<Definition> defs = new ArrayList<>(), List<VarDefinition> vars = new ArrayList<>(), List<Statement> stmts = new ArrayList<>()]:
+        (def1=definition{$defs.addAll($def1.ast); })* F='function' MAIN='main' '(' ')' ':' 'void' '{' (vd=variable_definition {$vars.addAll($vd.ast); })* (s1=statement{$stmts.addAll($s1.ast); })* '}' {$defs.add(new FunctionDefinition($MAIN.text, new FunctionType(VoidType.getInstance(), new ArrayList<VarDefinition>()), $vars, $stmts, $F.getLine(), $F.getCharPositionInLine()+1)); } EOF {$ast = new Program($defs); }
        ;
 
-variable_definition: 'let' id_list ':' type ';'
-                    ;
-
-// Debe haber una función main en ultimo lugar
-function_definition: 'function' ID '(' parameter_list? ')' ':' type '{' variable_definition* sentence* '}'
-                    ;
-
- type: 'void'
-       |'function'
-       | '['INT_CONSTANT']' type
-       | '['variable_definition+']'
-       | simple_type
-       ;
-
-simple_type: 'int'
-    | 'number'
-    | 'char'
-    ;
-
-sentence: ID '('expression_list?')' ';'
-        | 'log' expression_list ';'
-        | 'while' '(' expression ')' body
-        | expression '=' expression ';'
-        | 'input' expression_list ';'
-        | 'if' '(' expression ')' body ('else' body)?
-        | 'return' expression ';'
-       ;
-
-body: '{' sentence* '}'
-    | sentence
-    ;
-
-expression: INT_CONSTANT
-            | CHAR_CONSTANT
-            | REAL_CONSTANT
-            | ID
-            | '('expression')'
-            | expression'['expression']'
-            | expression'.'ID
-            | ID '('expression_list?')'
-            | '(' expression 'as' simple_type ')'
-            |'-' expression
-            | '!' expression
-            | expression ('*'|'/'|'%') expression
-            | expression ('+'|'-') expression
-            | expression ('>'|'>='|'<'|'<='|'!='|'==') expression
-            | expression ('&&'|'||') expression
+definition returns [List<Definition> ast = new ArrayList<>()] locals [List<VarDefinition> defs = new ArrayList<>(), List<Statement> stmts = new ArrayList<>()] :
+            F='function' ID ft=function_type '{' (vd=variable_definition {$defs.addAll($vd.ast);})* (s1=statement{$stmts.addAll($s1.ast);})* '}' {$ast.add(new FunctionDefinition($ID.text, $ft.ast, $defs, $stmts, $F.getLine(), $F.getCharPositionInLine()+1)); }
+            | vd=variable_definition {$ast.addAll($vd.ast); }
             ;
 
-expression_list: expression
-            | expression ',' expression_list
+variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals [List<String> vars = new ArrayList<>()]:
+    LET='let' ID1=ID {$vars.add($ID1.text); } (',' ID2=ID
+    {
+        $vars.add($ID2.text); })* ':' type ';' {$vars.stream().forEach(v -> $ast.add(new VarDefinition(v, $type.ast, $LET.getLine(), $LET.getCharPositionInLine()+1)));
+    }
+                    ;
+// Es necesario RecordField
+ type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
+        'void' {$ast=VoidType.getInstance(); }
+       | ft=function_type {$ast = $ft.ast; }
+       | '['INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast); }
+       | '['(vd=variable_definition {$vd.ast.stream().forEach(v->$rfs.add(new RecordField(v.getName(), v.getType()))); })+']' {$ast = new RecordType($rfs); }
+       | st=simple_type {$ast=$st.ast; }
+       ;
+
+function_type returns [FunctionType ast] locals [List<VarDefinition> vars = new ArrayList<>(); ]:
+            '(' (pl=parameter_list {$vars.addAll($pl.ast); })? ')' ':' type {$ast = new FunctionType($type.ast, $vars); }
             ;
 
-id_list: ID
-    | ID ',' id_list
+simple_type returns [Type ast]:
+    'int' {$ast=IntType.getInstance(); }
+    | 'number' {$ast=NumberType.getInstance(); }
+    | 'char' {$ast=CharType.getInstance(); }
     ;
 
-parameter_list: ID ':' simple_type
-            | ID ':' simple_type ',' parameter_list
+statement returns [List<Statement> ast = new ArrayList<>()] locals [List<Statement> else=new ArrayList<>(), List<Expression> exps = new ArrayList<>()]:
+        ID '('(es=expression_list {$exps.addAll($es.ast); })?')' ';' {$ast.add(new FunctionCall(new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1), $exps, $ID.getLine(), $ID.getCharPositionInLine()+1)); }
+        | LOG='log' el=expression_list ';'
+            {
+                $el.ast.stream().forEach(e -> $ast.add(new Log(e, $LOG.getLine(), $LOG.getCharPositionInLine()+1)));
+            }
+        | WHILE='while' '(' e1=expression ')' body {$ast.add(new While($e1.ast, $body.ast, $WHILE.getLine(), $WHILE.getCharPositionInLine()+1)); }
+        | e1=expression '=' e2=expression ';' {$ast.add(new Assignment($e1.ast, $e2.ast, $e1.ast.getLine(), $e1.ast.getColumn())); }
+        | INPUT='input' el=expression_list ';'
+            {
+                $el.ast.stream().forEach(e -> $ast.add(new Input(e, $INPUT.getLine(), $INPUT.getCharPositionInLine()+1)));
+           }
+        | IF='if' '(' e1=expression ')' b1=body ('else' b2=body {$else=$b2.ast; })? {$ast.add(new IfElse($e1.ast, $b1.ast, $else, $IF.getLine(), $IF.getCharPositionInLine()+1)); }
+        | RET='return' e1=expression ';' {$ast.add(new Return($e1.ast, $RET.getLine(), $RET.getCharPositionInLine()+1)); }
+       ;
+
+body returns [List<Statement> ast = new ArrayList<>()]: '{' (s1=statement {$ast.addAll($s1.ast); })* '}'
+    | s1=statement {$ast.addAll($s1.ast); }
+    ;
+
+// Mejor antes los datos o la posicion?
+expression returns [Expression ast]: INT_CONSTANT {$ast = new IntLiteral(LexerHelper.lexemeToInt($INT_CONSTANT.text), $INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1); }
+            | CHAR_CONSTANT {$ast = new CharLiteral(LexerHelper.lexemeToChar($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1); }
+            | REAL_CONSTANT {$ast = new NumberLiteral(LexerHelper.lexemeToReal($REAL_CONSTANT.text), $REAL_CONSTANT.getLine(), $REAL_CONSTANT.getCharPositionInLine()+1); }
+            | ID {$ast = new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1); }
+            | '('e1=expression')' {$ast=$e1.ast; }
+            | e1=expression'['e2=expression']' {$ast = new ArrayAccess($e1.ast, $e2.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | e1=expression'.'ID {$ast = new FieldAccess($e1.ast, $ID.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | ID '('es=expression_list?')' {$ast = new FunctionCall(new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1), $es.ast, $ID.getLine(), $ID.getCharPositionInLine()+1); }
+            | INIT='(' e1=expression 'as' st=simple_type ')' {$ast = new Cast($st.ast, $e1.ast, $INIT.getLine(), $INIT.getCharPositionInLine()+1); }
+            |'-' e1=expression {$ast = new UnaryMinus($e1.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | '!' e1=expression {$ast = new UnaryNot($e1.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | e1=expression OP=('*'|'/'|'%') e2=expression {$ast = new Arithmetic($e1.ast, $e2.ast, $OP.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | e1=expression OP=('+'|'-') e2=expression {$ast = new Arithmetic($e1.ast, $e2.ast, $OP.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | e1=expression OP=('>'|'>='|'<'|'<='|'!='|'==') e2=expression {$ast = new Comparison($e1.ast, $e2.ast, $OP.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            | e1=expression OP=('&&'|'||') e2=expression {$ast = new Logical($e1.ast, $e2.ast, $OP.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
+            ;
+
+expression_list returns [List<Expression> ast = new ArrayList<>()]: e1=expression {$ast.add($e1.ast);}
+            | e1=expression ',' list=expression_list {$ast.add($e1.ast); $ast.addAll($list.ast);}
+            ;
+
+parameter_list returns [List<VarDefinition> ast = new ArrayList<>()]: ID ':' st=simple_type {$ast.add(new VarDefinition($ID.text, $st.ast, $ID.getLine(), $ID.getCharPositionInLine()+1)); }
+            | ID ':' st=simple_type ',' list=parameter_list {$ast.add(new VarDefinition($ID.text, $st.ast, $ID.getLine(), $ID.getCharPositionInLine()+1)); $ast.addAll($list.ast); }
             ;
 
 // ----------------------------------------------------------------

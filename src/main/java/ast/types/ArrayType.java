@@ -1,12 +1,12 @@
 package ast.types;
 
 public class ArrayType implements Type {
-    private final Type elementType;
     private final int dimension;
+    private final Type elementType;
 
-    public ArrayType(Type elementType, int dimension) {
-        this.elementType = elementType;
+    public ArrayType(int dimension, Type elementType) {
         this.dimension = dimension;
+        this.elementType = elementType;
     }
 
     public Type getElementType() {

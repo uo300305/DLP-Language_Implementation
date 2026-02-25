@@ -6,19 +6,19 @@ import ast.expressions.Expression;
 
 public class IfElse extends AbstractLocatable implements Statement {
     // Lista de expresiones, condiciones: Primera if, segunda else
-    private final List<Expression> conditions;
+    private final Expression condition;
     private final List<Statement> ifBody;
     private final List<Statement> elseBody;
 
-    public IfElse(List<Expression> conditions, List<Statement> ifBody, List<Statement> elseBody, int line, int column) {
+    public IfElse(Expression condition, List<Statement> ifBody, List<Statement> elseBody, int line, int column) {
         super(line, column);
-        this.conditions = conditions;
+        this.condition = condition;
         this.ifBody = ifBody;
         this.elseBody = elseBody;
     }
 
-    public List<Expression> getCondition() {
-        return conditions;
+    public Expression getCondition() {
+        return condition;
     }
 
     public List<Statement> getIfBody() {

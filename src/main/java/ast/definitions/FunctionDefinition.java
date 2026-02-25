@@ -10,23 +10,21 @@ public class FunctionDefinition extends AbstractLocatable implements Definition 
 
     private final String name;
     private final FunctionType type;
-    private final List<VarDefinition> parameters;
+    private final List<VarDefinition> definitions;
     private final List<Statement> body;
 
     public FunctionDefinition(
             String name,
-            Type returnType,
-            List<VarDefinition> parameters,
+            FunctionType type,
+            List<VarDefinition> definitions,
             List<Statement> body,
             int line,
             int column
     ) {
         super(line, column);
         this.name = name;
-        // Entiendo que cuando se define una función se indica el return
-        // y con ello se pasa el tipo de retorno
-        this.type = new FunctionType(returnType, parameters);
-        this.parameters = parameters;
+        this.type =type;
+        this.definitions = definitions;
         this.body = body;
     }
 
@@ -41,7 +39,7 @@ public class FunctionDefinition extends AbstractLocatable implements Definition 
     }
 
     public List<VarDefinition> getParameters() {
-        return parameters;
+        return definitions;
     }
 
     public List<Statement> getBody() {
