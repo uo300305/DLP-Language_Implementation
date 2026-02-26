@@ -1,3 +1,4 @@
-while ((f(2) as number) >=3 && x[2+2] < paco.no){
-    a = 2+2;
+function main() : void {
+    input a,b,s,q,3,s,c;
+    log asd,asd,e,s,f,t,5,'2';
 }

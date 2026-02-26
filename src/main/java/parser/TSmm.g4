@@ -25,15 +25,14 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
     ;
 
  type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
-        'void' {$ast=VoidType.getInstance(); }
-       | ft=function_type {$ast = $ft.ast; }
+        ft=function_type {$ast = $ft.ast; }
        | '['INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast); }
        | '['(vd=variable_definition {$vd.ast.stream().forEach(v->$rfs.add(new RecordField(v.getName(), v.getType()))); })+']' {$ast = new RecordType($rfs); }
        | st=simple_type {$ast=$st.ast; }
        ;
 
-function_type returns [FunctionType ast] locals [List<VarDefinition> params = new ArrayList<>(); ]:
-            '(' ID1=ID ':' st1=simple_type {$params.add(new VarDefinition($ID1.text, $st1.ast, $ID1.getLine(), $ID1.getCharPositionInLine()+1)); } (',' ID2=ID ':' st2=simple_type {$params.add(new VarDefinition($ID2.text, $st2.ast, $ID2.getLine(), $ID2.getCharPositionInLine()+1));})* ')' ':' type {$ast = new FunctionType($type.ast, $params); }
+function_type returns [FunctionType ast] locals [List<VarDefinition> params = new ArrayList<>(), Type t = null; ]:
+            '(' ID1=ID ':' st1=simple_type {$params.add(new VarDefinition($ID1.text, $st1.ast, $ID1.getLine(), $ID1.getCharPositionInLine()+1)); } (',' ID2=ID ':' st2=simple_type {$params.add(new VarDefinition($ID2.text, $st2.ast, $ID2.getLine(), $ID2.getCharPositionInLine()+1));})* ')' ':' (type {$t=$type.ast; } | 'void' {$t=VoidType.getInstance(); }) {$ast = new FunctionType($t, $params); }
             ;
 
 simple_type returns [Type ast]:
