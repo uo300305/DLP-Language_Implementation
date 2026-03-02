@@ -32,7 +32,7 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
        ;
 
 function_type returns [FunctionType ast] locals [List<VarDefinition> params = new ArrayList<>(), Type t = null; ]:
-            '(' ID1=ID ':' st1=simple_type {$params.add(new VarDefinition($ID1.text, $st1.ast, $ID1.getLine(), $ID1.getCharPositionInLine()+1)); } (',' ID2=ID ':' st2=simple_type {$params.add(new VarDefinition($ID2.text, $st2.ast, $ID2.getLine(), $ID2.getCharPositionInLine()+1));})* ')' ':' (type {$t=$type.ast; } | 'void' {$t=VoidType.getInstance(); }) {$ast = new FunctionType($t, $params); }
+            '(' (pl=param_list {$params.addAll($pl.ast); })? ')' ':' (type {$t=$type.ast; } | 'void' {$t=VoidType.getInstance(); }) {$ast = new FunctionType($t, $params); }
             ;
 
 simple_type returns [Type ast]:
@@ -85,6 +85,10 @@ expression_list returns [List<Expression> ast = new ArrayList<>()]:
             e1=expression {$ast.add($e1.ast);}
             | e1=expression ',' list=expression_list {$ast.add($e1.ast); $ast.addAll($list.ast);}
             ;
+
+param_list returns [List<VarDefinition> ast = new ArrayList<>()]:
+    ID1=ID ':' st1=simple_type {$ast.add(new VarDefinition($ID1.text, $st1.ast, $ID1.getLine(), $ID1.getCharPositionInLine()+1)); } (',' ID2=ID ':' st2=simple_type {$ast.add(new VarDefinition($ID2.text, $st2.ast, $ID2.getLine(), $ID2.getCharPositionInLine()+1));})*
+    ;
 
 // ----------------------------------------------------------------
 
