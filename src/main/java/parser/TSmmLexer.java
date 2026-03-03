@@ -6,6 +6,8 @@ package parser;
     import ast.definitions.*;
     import ast.statements.*;
     import ast.types.*;
+    import java.util.Set;
+    import java.util.HashSet;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

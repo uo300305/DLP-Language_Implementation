@@ -5,6 +5,8 @@ grammar TSmm;
     import ast.definitions.*;
     import ast.statements.*;
     import ast.types.*;
+    import java.util.Set;
+    import java.util.HashSet;
 }
 
 // Forzamos a que pare en el EOF
@@ -27,7 +29,24 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
  type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
         ft=function_type {$ast = $ft.ast; }
        | '['INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast); }
-       | '['(vd=variable_definition {$vd.ast.stream().forEach(v->$rfs.add(new RecordField(v.getName(), v.getType()))); })+']' {$ast = new RecordType($rfs); }
+       | INIT='['(vd=variable_definition {
+
+                $vd.ast.stream().forEach(v->
+                    $rfs.add(new RecordField(v.getName(), v.getType()))
+                );
+
+                })+
+                ']'
+                {
+                    $ast = new RecordType($rfs);
+
+                    Set<String> set = new HashSet<>();
+                    for(RecordField r : $rfs) {
+                        if(!set.add(r.getName())){
+                            new ErrorType("Duplicated variable", new AbstractLocatable($INIT.getLine(),$INIT.getCharPositionInLine()));
+                        }
+                    }
+                }
        | st=simple_type {$ast=$st.ast; }
        ;
 

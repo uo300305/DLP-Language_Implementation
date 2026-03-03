@@ -6,6 +6,8 @@ package parser;
     import ast.definitions.*;
     import ast.statements.*;
     import ast.types.*;
+    import java.util.Set;
+    import java.util.HashSet;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -428,6 +430,7 @@ public class TSmmParser extends Parser {
 		public Function_typeContext ft;
 		public Token INT_CONSTANT;
 		public TypeContext type;
+		public Token INIT;
 		public Variable_definitionContext vd;
 		public Simple_typeContext st;
 		public Function_typeContext function_type() {
@@ -486,7 +489,7 @@ public class TSmmParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(111);
-				match(T__11);
+				((TypeContext)_localctx).INIT = match(T__11);
 				setState(115); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -495,7 +498,13 @@ public class TSmmParser extends Parser {
 					{
 					setState(112);
 					((TypeContext)_localctx).vd = variable_definition();
-					((TypeContext)_localctx).vd.ast.stream().forEach(v->_localctx.rfs.add(new RecordField(v.getName(), v.getType()))); 
+
+
+					                ((TypeContext)_localctx).vd.ast.stream().forEach(v->
+					                    _localctx.rfs.add(new RecordField(v.getName(), v.getType()))
+					                );
+
+					                
 					}
 					}
 					setState(117); 
@@ -504,7 +513,16 @@ public class TSmmParser extends Parser {
 				} while ( _la==T__8 );
 				setState(119);
 				match(T__12);
-				((TypeContext)_localctx).ast =  new RecordType(_localctx.rfs); 
+
+				                    ((TypeContext)_localctx).ast =  new RecordType(_localctx.rfs);
+
+				                    Set<String> set = new HashSet<>();
+				                    for(RecordField r : _localctx.rfs) {
+				                        if(!set.add(r.getName())){
+				                            new ErrorType("Duplicated variable", new AbstractLocatable(((TypeContext)_localctx).INIT.getLine(),((TypeContext)_localctx).INIT.getCharPositionInLine()));
+				                        }
+				                    }
+				                
 				}
 				break;
 			case 4:

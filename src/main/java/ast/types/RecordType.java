@@ -13,4 +13,6 @@ public class RecordType implements Type {
     public List<RecordField> getFields() {
         return fields;
     }
+
+
 }

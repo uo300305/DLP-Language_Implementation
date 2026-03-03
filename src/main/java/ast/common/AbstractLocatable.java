@@ -1,10 +1,10 @@
 package ast.common;
 
-public abstract class AbstractLocatable implements Locatable {
+public class AbstractLocatable implements Locatable {
     private final int line;
     private final int column;
 
-    protected AbstractLocatable(int line, int column) {
+    public AbstractLocatable(int line, int column) {
         this.line = line;
         this.column = column;
     }
