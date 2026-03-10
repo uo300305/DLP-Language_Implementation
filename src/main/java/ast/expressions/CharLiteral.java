@@ -1,4 +1,7 @@
 package ast.expressions;
+
+import semantic.Visitor;
+
 public class CharLiteral extends Literal {
     private final char value;
 
@@ -9,5 +12,10 @@ public class CharLiteral extends Literal {
 
     public char getValue() {
         return value;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

@@ -1,8 +1,8 @@
 package ast.statements;
-import ast.common.AbstractLocatable;
 import ast.expressions.Expression;
+import semantic.Visitor;
 
-public class Return extends AbstractLocatable implements Statement {
+public class Return extends AbstractStatement {
     private final Expression expression;
 
     public Return(Expression expression, int line, int column) {
@@ -12,5 +12,10 @@ public class Return extends AbstractLocatable implements Statement {
 
     public Expression getExpression() {
         return expression;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

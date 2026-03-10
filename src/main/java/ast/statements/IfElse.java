@@ -1,10 +1,11 @@
 package ast.statements;
 import java.util.List;
-import ast.common.AbstractLocatable;
+
 import ast.expressions.Expression;
+import semantic.Visitor;
 
 
-public class IfElse extends AbstractLocatable implements Statement {
+public class IfElse extends AbstractStatement {
     // Lista de expresiones, condiciones: Primera if, segunda else
     private final Expression condition;
     private final List<Statement> ifBody;
@@ -28,4 +29,10 @@ public class IfElse extends AbstractLocatable implements Statement {
     public List<Statement> getElseBody() {
         return elseBody;
     }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
+    }
+
 }

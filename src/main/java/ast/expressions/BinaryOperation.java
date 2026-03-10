@@ -1,7 +1,7 @@
 package ast.expressions;
 import ast.common.AbstractLocatable;
 
-public abstract class BinaryOperation extends AbstractLocatable implements Expression {
+public abstract class BinaryOperation extends AbstractExpression {
     private final Expression left;
     private final Expression right;
     private final String operator;

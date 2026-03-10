@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.common.ErrorHandler;
 import ast.common.Locatable;
+import semantic.Visitor;
 
 
 public class ErrorType implements Type {
@@ -17,5 +18,10 @@ public class ErrorType implements Type {
     @Override
     public String toString() {
         return "Location: (" + location.getLine() + ":" + location.getColumn() + ")" + " " + message;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

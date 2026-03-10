@@ -1,6 +1,7 @@
 package ast.definitions;
 import java.util.List;
 import ast.common.AbstractLocatable;
+import semantic.Visitor;
 import ast.statements.Statement;
 import ast.types.FunctionType;
 import ast.types.Type;
@@ -44,5 +45,10 @@ public class FunctionDefinition extends AbstractLocatable implements Definition 
 
     public List<Statement> getBody() {
         return body;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

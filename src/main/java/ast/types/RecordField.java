@@ -1,5 +1,6 @@
 package ast.types;
 import ast.common.ASTNode;
+import semantic.Visitor;
 
 public class RecordField implements ASTNode {
     private final String name;
@@ -16,5 +17,10 @@ public class RecordField implements ASTNode {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

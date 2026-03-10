@@ -519,7 +519,7 @@ public class TSmmParser extends Parser {
 				                    Set<String> set = new HashSet<>();
 				                    for(RecordField r : _localctx.rfs) {
 				                        if(!set.add(r.getName())){
-				                            new ErrorType("Duplicated variable", new AbstractLocatable(((TypeContext)_localctx).INIT.getLine(),((TypeContext)_localctx).INIT.getCharPositionInLine()));
+				                            new ErrorType("Duplicated variable", ((TypeContext)_localctx).vd.ast.get(0));
 				                        }
 				                    }
 				                

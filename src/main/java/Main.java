@@ -1,14 +1,15 @@
-import ast.common.ASTNode;
-import ast.common.ErrorHandler;
-import parser.*;
-
 import org.antlr.v4.runtime.*;
-
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
+import ast.common.ASTNode;
+import ast.common.ErrorHandler;
+import parser.TSmmLexer;
+import parser.TSmmParser;
+import semantic.LValueVisitor;
+import semantic.Visitor;
 
 public class Main {
-	
+
 	public static void main(String... args) throws Exception {
 		   if (args.length<1) {
 		        System.err.println("Please, pass me the input file.");
@@ -20,10 +21,13 @@ public class Main {
 		TSmmLexer lexer = new TSmmLexer(input);
 
 		// create a parser that feeds off the tokens buffer
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		CommonTokenStream tokens = new CommonTokenStream(lexer); 
 		TSmmParser parser = new TSmmParser(tokens);
 		ASTNode ast = parser.program().ast;
-		
+
+		Visitor<Void, Void> lValueVisitor = new LValueVisitor();
+		ast.accept(lValueVisitor, null);
+
 		// * Check errors
 		if(ErrorHandler.getInstance().anyError()){
 			// * Show errors

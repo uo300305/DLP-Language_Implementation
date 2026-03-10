@@ -1,7 +1,7 @@
 package ast.expressions;
-import ast.common.AbstractLocatable;
+import semantic.Visitor;
 
-public class ArrayAccess extends AbstractLocatable implements Expression {
+public class ArrayAccess extends AbstractExpression {
     private final Expression array;
     private final Expression index;
 
@@ -17,5 +17,10 @@ public class ArrayAccess extends AbstractLocatable implements Expression {
 
     public Expression getIndex() {
         return index;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

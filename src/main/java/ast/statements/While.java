@@ -1,10 +1,11 @@
 package ast.statements;
 import java.util.List;
-import ast.common.AbstractLocatable;
+
 import ast.expressions.Expression;
+import semantic.Visitor;
 
 
-public class While extends AbstractLocatable implements Statement {
+public class While extends AbstractStatement {
     private final Expression condition;
     private final List<Statement> body;
 
@@ -21,4 +22,8 @@ public class While extends AbstractLocatable implements Statement {
     public List<Statement> getBody() {
         return body;
     }
-}
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
+    }}

@@ -1,6 +1,7 @@
 package ast.statements;
 import ast.common.AbstractLocatable;
 import ast.expressions.Expression;
+import semantic.Visitor;
 
 public class Input extends AbstractLocatable implements Statement {
     private final Expression expression;
@@ -12,5 +13,10 @@ public class Input extends AbstractLocatable implements Statement {
 
     public Expression getExpression() {
         return expression;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

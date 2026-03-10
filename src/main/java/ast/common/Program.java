@@ -1,6 +1,7 @@
 package ast.common;
 import java.util.List;
 import ast.definitions.Definition;
+import semantic.Visitor;
 
 
 public class Program implements ASTNode {
@@ -14,5 +15,10 @@ public class Program implements ASTNode {
 
     public List<Definition> getDefinitions() {
         return definitions;
+    }
+
+
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

@@ -1,7 +1,7 @@
 package ast.expressions;
-import ast.common.AbstractLocatable;
+import semantic.Visitor;
 
-public class FieldAccess extends AbstractLocatable implements Expression {
+public class FieldAccess extends AbstractExpression {
     private final Expression expression;
     private final String field;
 
@@ -17,5 +17,10 @@ public class FieldAccess extends AbstractLocatable implements Expression {
 
     public String getField() {
         return field;
+    }
+
+    @Override
+    public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
+        return visitor.visit(this, param);
     }
 }

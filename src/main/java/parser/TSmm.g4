@@ -43,7 +43,7 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
                     Set<String> set = new HashSet<>();
                     for(RecordField r : $rfs) {
                         if(!set.add(r.getName())){
-                            new ErrorType("Duplicated variable", new AbstractLocatable($INIT.getLine(),$INIT.getCharPositionInLine()));
+                            new ErrorType("Duplicated variable", $vd.ast.get(0));
                         }
                     }
                 }
