@@ -1,12 +1,13 @@
 package ast.types;
 
+import ast.expressions.Expression;
 import semantic.Visitor;
 
 public class ArrayType implements Type {
-    private final int dimension;
+    private final Expression dimension;
     private final Type elementType;
 
-    public ArrayType(int dimension, Type elementType) {
+    public ArrayType(Expression dimension, Type elementType) {
         this.dimension = dimension;
         this.elementType = elementType;
     }
@@ -15,7 +16,7 @@ public class ArrayType implements Type {
         return elementType;
     }
 
-    public int getDimension() {
+    public Expression getDimension() {
         return dimension;
     }
 

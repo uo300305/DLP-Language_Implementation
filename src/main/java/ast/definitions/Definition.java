@@ -4,7 +4,11 @@ import ast.types.Type;
 
 public interface Definition extends Locatable {
 
-    public String getName();
+    String getName();
 
-    public Type getType();
+    Type getType();
+
+    int getScope();
+
+    void setScope(int scope);
 }

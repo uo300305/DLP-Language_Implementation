@@ -28,24 +28,17 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
 
  type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
         ft=function_type {$ast = $ft.ast; }
-       | '['INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT_CONSTANT.text), $type.ast); }
+       | '['expression']' type {$ast = new ArrayType($expression.ast, $type.ast); }
        | INIT='['(vd=variable_definition {
 
                 $vd.ast.stream().forEach(v->
-                    $rfs.add(new RecordField(v.getName(), v.getType()))
+                    $rfs.add(new RecordField(v.getLine(), v.getColumn(), v.getName(), v.getType()))
                 );
 
                 })+
                 ']'
                 {
                     $ast = new RecordType($rfs);
-
-                    Set<String> set = new HashSet<>();
-                    for(RecordField r : $rfs) {
-                        if(!set.add(r.getName())){
-                            new ErrorType("Duplicated variable", $vd.ast.get(0));
-                        }
-                    }
                 }
        | st=simple_type {$ast=$st.ast; }
        ;

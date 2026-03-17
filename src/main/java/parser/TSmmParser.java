@@ -428,7 +428,7 @@ public class TSmmParser extends Parser {
 		public Type ast;
 		public List<RecordField> rfs = new ArrayList<>();
 		public Function_typeContext ft;
-		public Token INT_CONSTANT;
+		public ExpressionContext expression;
 		public TypeContext type;
 		public Token INIT;
 		public Variable_definitionContext vd;
@@ -436,7 +436,9 @@ public class TSmmParser extends Parser {
 		public Function_typeContext function_type() {
 			return getRuleContext(Function_typeContext.class,0);
 		}
-		public TerminalNode INT_CONSTANT() { return getToken(TSmmParser.INT_CONSTANT, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
@@ -477,12 +479,12 @@ public class TSmmParser extends Parser {
 				setState(105);
 				match(T__11);
 				setState(106);
-				((TypeContext)_localctx).INT_CONSTANT = match(INT_CONSTANT);
+				((TypeContext)_localctx).expression = expression(0);
 				setState(107);
 				match(T__12);
 				setState(108);
 				((TypeContext)_localctx).type = type();
-				((TypeContext)_localctx).ast =  new ArrayType(LexerHelper.lexemeToInt((((TypeContext)_localctx).INT_CONSTANT!=null?((TypeContext)_localctx).INT_CONSTANT.getText():null)), ((TypeContext)_localctx).type.ast); 
+				((TypeContext)_localctx).ast =  new ArrayType(((TypeContext)_localctx).expression.ast, ((TypeContext)_localctx).type.ast); 
 				}
 				break;
 			case 3:
@@ -501,7 +503,7 @@ public class TSmmParser extends Parser {
 
 
 					                ((TypeContext)_localctx).vd.ast.stream().forEach(v->
-					                    _localctx.rfs.add(new RecordField(v.getName(), v.getType()))
+					                    _localctx.rfs.add(new RecordField(v.getLine(), v.getColumn(), v.getName(), v.getType()))
 					                );
 
 					                
@@ -515,13 +517,6 @@ public class TSmmParser extends Parser {
 				match(T__12);
 
 				                    ((TypeContext)_localctx).ast =  new RecordType(_localctx.rfs);
-
-				                    Set<String> set = new HashSet<>();
-				                    for(RecordField r : _localctx.rfs) {
-				                        if(!set.add(r.getName())){
-				                            new ErrorType("Duplicated variable", ((TypeContext)_localctx).vd.ast.get(0));
-				                        }
-				                    }
 				                
 				}
 				break;
@@ -1494,7 +1489,7 @@ public class TSmmParser extends Parser {
 		"\u0005\u0000\u0000bc\u0003\u0006\u0003\u0000cd\u0005\u000b\u0000\u0000"+
 		"de\u0006\u0002\uffff\uffff\u0000e\u0005\u0001\u0000\u0000\u0000fg\u0003"+
 		"\b\u0004\u0000gh\u0006\u0003\uffff\uffff\u0000h~\u0001\u0000\u0000\u0000"+
-		"ij\u0005\f\u0000\u0000jk\u0005(\u0000\u0000kl\u0005\r\u0000\u0000lm\u0003"+
+		"ij\u0005\f\u0000\u0000jk\u0003\u0010\b\u0000kl\u0005\r\u0000\u0000lm\u0003"+
 		"\u0006\u0003\u0000mn\u0006\u0003\uffff\uffff\u0000n~\u0001\u0000\u0000"+
 		"\u0000os\u0005\f\u0000\u0000pq\u0003\u0004\u0002\u0000qr\u0006\u0003\uffff"+
 		"\uffff\u0000rt\u0001\u0000\u0000\u0000sp\u0001\u0000\u0000\u0000tu\u0001"+

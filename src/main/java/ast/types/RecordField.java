@@ -1,12 +1,14 @@
 package ast.types;
 import ast.common.ASTNode;
+import ast.common.AbstractLocatable;
 import semantic.Visitor;
 
-public class RecordField implements ASTNode {
+public class RecordField extends AbstractLocatable {
     private final String name;
     private final Type type;
 
-    public RecordField(String name, Type type) {
+    public RecordField(int line, int column, String name, Type type) {
+        super(line, column);
         this.name = name;
         this.type = type;
     }

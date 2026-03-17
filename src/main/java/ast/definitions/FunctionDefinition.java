@@ -7,10 +7,8 @@ import ast.types.FunctionType;
 import ast.types.Type;
 
 
-public class FunctionDefinition extends AbstractLocatable implements Definition {
+public class FunctionDefinition extends AbstractDefinition implements Definition {
 
-    private final String name;
-    private final FunctionType type;
     private final List<VarDefinition> definitions;
     private final List<Statement> body;
 
@@ -22,21 +20,9 @@ public class FunctionDefinition extends AbstractLocatable implements Definition 
             int line,
             int column
     ) {
-        super(line, column);
-        this.name = name;
-        this.type =type;
+        super(line, column, name, type);
         this.definitions = definitions;
         this.body = body;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Type getType() {
-        return type;
     }
 
     public List<VarDefinition> getParameters() {
