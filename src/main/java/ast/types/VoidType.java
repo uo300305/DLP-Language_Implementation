@@ -2,7 +2,7 @@ package ast.types;
 
 import semantic.Visitor;
 
-public final class VoidType implements Type {
+public final class VoidType extends AbstractType {
     private static final VoidType INSTANCE = new VoidType();
 
     private VoidType() {
@@ -15,5 +15,10 @@ public final class VoidType implements Type {
     @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(getInstance(), param);
+    }
+
+    @Override
+    public String toString() {
+        return "void";
     }
 }

@@ -1,6 +1,0 @@
-// Lvalue required
-
-function main(): void{
-	let i:int;
-	(i+2) = 3;
-}

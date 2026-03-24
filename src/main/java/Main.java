@@ -1,3 +1,4 @@
+import ast.types.Type;
 import org.antlr.v4.runtime.*;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
@@ -7,6 +8,7 @@ import parser.TSmmLexer;
 import parser.TSmmParser;
 import semantic.IdentificationVisitor;
 import semantic.LValueVisitor;
+import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
 
 public class Main {
@@ -26,8 +28,14 @@ public class Main {
 		TSmmParser parser = new TSmmParser(tokens);
 		ASTNode ast = parser.program().ast;
 
-		Visitor<Void, Void> lValueVisitor = new IdentificationVisitor();
-		ast.accept(lValueVisitor, null);
+		Visitor<Void, Void> lvalueVisitor= new LValueVisitor();
+		ast.accept(lvalueVisitor, null);
+
+		Visitor<Void, Void> identificationVisitor= new IdentificationVisitor();
+		ast.accept(identificationVisitor, null);
+
+		Visitor<Type, Boolean> typeCheckingVisitor = new TypeCheckingVisitor();
+		ast.accept(typeCheckingVisitor, null);
 
 		// * Check errors
 		if(ErrorHandler.getInstance().anyError()){

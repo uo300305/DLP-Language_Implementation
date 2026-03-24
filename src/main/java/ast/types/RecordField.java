@@ -25,4 +25,9 @@ public class RecordField extends AbstractLocatable {
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(this, param);
     }
+
+    @Override
+    public String toString() {
+        return name + ": " + type;
+    }
 }

@@ -7,7 +7,7 @@ import ast.expressions.*;
 import ast.statements.*;
 import ast.types.*;
 
-public abstract class AbstractVisitor<RT, PT> implements Visitor<PT, RT> {
+public abstract class AbstractVisitor<PT, RT> implements Visitor<PT, RT> {
 
     @Override
     public RT visit(Program program, PT param) {
@@ -24,7 +24,7 @@ public abstract class AbstractVisitor<RT, PT> implements Visitor<PT, RT> {
     @Override
     public RT visit(FunctionDefinition functionDefinition, PT param) {
         functionDefinition.getType().accept(this, param);
-        functionDefinition.getParameters().forEach(d -> d.accept(this, param));
+        functionDefinition.getDefinitions().forEach(d -> d.accept(this, param));
         functionDefinition.getBody().forEach(s -> s.accept(this, param));
         return null;
     }
@@ -163,7 +163,6 @@ public abstract class AbstractVisitor<RT, PT> implements Visitor<PT, RT> {
     @Override
     public RT visit(ArrayType arrayType, PT param) {
         arrayType.getElementType().accept(this, param);
-        arrayType.getDimension().accept(this, param);
         return null;
     }
 

@@ -6,7 +6,6 @@ import ast.types.Type;
 
 public class VarDefinition extends AbstractDefinition implements Statement {
 
-
     public VarDefinition(String name, Type type, int line, int column) {
         super(line, column, name, type);
     }

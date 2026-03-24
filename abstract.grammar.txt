@@ -1,0 +1,35 @@
+// TODO acabar la gramática abstracta
+A: expression.type = Type
+G:
+    (1) IntLiteral: expression -> INT_CONSTANT
+    (2) NumberLiteral: expression -> NUMBER_CONSTANT
+    (3) CharLiteral: expression -> CHAR_CONSTANT
+    (4) Variable: expression -> ID
+    (5) Arithmetic: expression1 -> expression2 (+-*/) expression3
+    (6) Comparison
+    (7) Logical
+    (8) ArrayAccess
+    (9) FieldAccess
+    (10) FunctionCall
+    (11) Cast
+    (12) UnaryMinus
+    (13) UnaryNot
+    (14) IfElse: statement1 -> expression statement*2 statement*3
+    (15) while: statement1 -> expression statement*2
+
+R:
+    (1) expression.type = IntType.getInstance()
+    (2) expression.type = NumberType.getInstance()
+    (3) expression.type = CharType.getInstance()
+    (4) expression.type = expression.definition.type()
+    (5) expression1.type = expression2.type.arithmetic(expression3.type, expression1)
+    (6)
+    (7)
+    (8)
+    (9)
+    (10)
+    (11)
+    (12)
+    (13)
+    (14) statement1.expression.type.mustBeLogical(statement2)
+    (15) statement1.expression.type.mustBeLogical(statement2)

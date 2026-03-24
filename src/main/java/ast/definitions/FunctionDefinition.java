@@ -1,10 +1,9 @@
 package ast.definitions;
 import java.util.List;
-import ast.common.AbstractLocatable;
+
 import semantic.Visitor;
 import ast.statements.Statement;
 import ast.types.FunctionType;
-import ast.types.Type;
 
 
 public class FunctionDefinition extends AbstractDefinition implements Definition {
@@ -25,7 +24,7 @@ public class FunctionDefinition extends AbstractDefinition implements Definition
         this.body = body;
     }
 
-    public List<VarDefinition> getParameters() {
+    public List<VarDefinition> getDefinitions() {
         return definitions;
     }
 

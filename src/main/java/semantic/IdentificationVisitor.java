@@ -1,9 +1,9 @@
 package semantic;
 
+import ast.definitions.Definition;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VarDefinition;
 import ast.expressions.*;
-import ast.statements.*;
 import ast.types.*;
 import symboltable.SymbolTable;
 
@@ -31,7 +31,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
             new ErrorType("No pueden declararse dos variables con el mismo nombre", functionDefinition);
         table.set();
         functionDefinition.getType().accept(this, param);
-        functionDefinition.getParameters().forEach(d -> d.accept(this, param));
+        functionDefinition.getDefinitions().forEach(d -> d.accept(this, param));
         functionDefinition.getBody().forEach(s -> s.accept(this, param));
         table.reset();
         return null;
@@ -39,8 +39,11 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(Variable var, Void param) {
-        if (table.find(var.getName()) == null)
+        Definition vd = table.find(var.getName());
+        if (vd == null)
             new ErrorType("La variable debe ser definida antes de usarse", var);
+        else
+            var.setDefinition(vd);
         return null;
     }
 

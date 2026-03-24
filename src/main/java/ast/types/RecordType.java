@@ -1,10 +1,11 @@
 package ast.types;
 
+import ast.common.Locatable;
 import semantic.Visitor;
 
 import java.util.List;
 
-public class RecordType implements Type {
+public class RecordType extends AbstractType {
 
     private final List<RecordField> fields;
 
@@ -17,9 +18,25 @@ public class RecordType implements Type {
     }
 
     @Override
+    public Type squareBrackets(Type other, Locatable locatable) {
+        return this;
+    }
+
+    public Type dot(String name, Locatable locatable) {
+        return this.fields.stream().
+                filter(field -> field.getName().equals(name))
+                .findFirst()
+                .map(RecordField::getType)
+                .orElse(new ErrorType("El campo '" + name + "' no existe en el record", locatable));
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(this, param);
     }
 
-
+    @Override
+    public String toString() {
+        return "record";
+    }
 }

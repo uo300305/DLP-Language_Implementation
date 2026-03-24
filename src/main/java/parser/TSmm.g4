@@ -28,7 +28,7 @@ variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals
 
  type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
         ft=function_type {$ast = $ft.ast; }
-       | '['expression']' type {$ast = new ArrayType($expression.ast, $type.ast); }
+       | '['INT=INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT.text), $type.ast); }
        | INIT='['(vd=variable_definition {
 
                 $vd.ast.stream().forEach(v->
@@ -53,7 +53,7 @@ simple_type returns [Type ast]:
     | 'char' {$ast=CharType.getInstance(); }
     ;
 
-statement returns [List<Statement> ast = new ArrayList<>()] locals [List<Statement> else=new ArrayList<>(), List<Expression> exps = new ArrayList<>()]:
+statement returns [List<Statement> ast = new ArrayList<>()] locals [List<Statement> elseBody=new ArrayList<>(), List<Expression> exps = new ArrayList<>()]:
         ID '('(es=expression_list {$exps.addAll($es.ast); })?')' ';' {$ast.add(new FunctionCall(new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1), $exps, $ID.getLine(), $ID.getCharPositionInLine()+1)); }
         | LOG='log' el=expression_list ';'
             {
@@ -65,7 +65,7 @@ statement returns [List<Statement> ast = new ArrayList<>()] locals [List<Stateme
             {
                 $el.ast.stream().forEach(e -> $ast.add(new Input(e, $INPUT.getLine(), $INPUT.getCharPositionInLine()+1)));
            }
-        | IF='if' '(' e1=expression ')' b1=body ('else' b2=body {$else=$b2.ast; })? {$ast.add(new IfElse($e1.ast, $b1.ast, $else, $IF.getLine(), $IF.getCharPositionInLine()+1)); }
+        | IF='if' '(' e1=expression ')' b1=body ('else' b2=body {$elseBody=$b2.ast; })? {$ast.add(new IfElse($e1.ast, $b1.ast, $elseBody, $IF.getLine(), $IF.getCharPositionInLine()+1)); }
         | RET='return' e1=expression ';' {$ast.add(new Return($e1.ast, $RET.getLine(), $RET.getCharPositionInLine()+1)); }
        ;
 
@@ -75,7 +75,7 @@ body returns [List<Statement> ast = new ArrayList<>()]:
     ;
 
 // Mejor antes los datos o la posicion?
-expression returns [Expression ast]:
+expression returns [Expression ast] locals [List<Expression> exps = new ArrayList<>()]:
             INT_CONSTANT {$ast = new IntLiteral(LexerHelper.lexemeToInt($INT_CONSTANT.text), $INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1); }
             | CHAR_CONSTANT {$ast = new CharLiteral(LexerHelper.lexemeToChar($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1); }
             | REAL_CONSTANT {$ast = new NumberLiteral(LexerHelper.lexemeToReal($REAL_CONSTANT.text), $REAL_CONSTANT.getLine(), $REAL_CONSTANT.getCharPositionInLine()+1); }
@@ -83,7 +83,7 @@ expression returns [Expression ast]:
             | '('e1=expression')' {$ast=$e1.ast; }
             | e1=expression'['e2=expression']' {$ast = new ArrayAccess($e1.ast, $e2.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }
             | e1=expression'.'ID {$ast = new FieldAccess($e1.ast, $ID.text, $e1.ast.getLine(), $e1.ast.getColumn()); }
-            | ID '('es=expression_list?')' {$ast = new FunctionCall(new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1), $es.ast, $ID.getLine(), $ID.getCharPositionInLine()+1); }
+            | ID '('(es=expression_list {$exps.addAll($es.ast);})?')' {$ast = new FunctionCall(new Variable($ID.text, $ID.getLine(), $ID.getCharPositionInLine()+1), $exps, $ID.getLine(), $ID.getCharPositionInLine()+1); }
             | INIT='(' e1=expression 'as' st=simple_type ')' {$ast = new Cast($st.ast, $e1.ast, $INIT.getLine(), $INIT.getCharPositionInLine()+1); }
             |'-' e1=expression {$ast = new UnaryMinus($e1.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }
             | '!' e1=expression {$ast = new UnaryNot($e1.ast, $e1.ast.getLine(), $e1.ast.getColumn()); }

@@ -4,8 +4,10 @@ import ast.common.ErrorHandler;
 import ast.common.Locatable;
 import semantic.Visitor;
 
+import java.util.List;
 
-public class ErrorType implements Type {
+
+public class ErrorType extends AbstractType {
     private String message;
     private Locatable location;
 
@@ -13,6 +15,44 @@ public class ErrorType implements Type {
         this.message = message;
         this.location = location;
         ErrorHandler.getInstance().addError(this);
+    }
+
+    @Override
+    public void mustBeLogical(Locatable locatable) { }
+
+    @Override
+    public void mustPromote(Type other, Locatable locatable) { }
+
+    @Override
+    public void mustBeBintIn(Locatable locatable) { }
+
+    @Override
+    public Type arithmetic(Type other, Locatable locatable) { return this; }
+
+    @Override
+    public Type arithmetic(Locatable locatable) { return this; }
+
+    @Override
+    public Type comparison(Type other, Locatable locatable) { return this; }
+
+    @Override
+    public Type logical(Type other, Locatable locatable) { return this; }
+
+    @Override
+    public Type logical(Locatable locatable) { return this; }
+
+    @Override
+    public Type squareBrackets(Type other, Locatable locatable) { return this; }
+
+    @Override
+    public Type dot(String name, Locatable locatable) { return this; }
+
+    @Override
+    public Type parenthesis(List<Type> types, Locatable locatable) { return this; }
+
+    @Override
+    public void mustBePrimitive(Locatable locatable) {
+
     }
 
     @Override
