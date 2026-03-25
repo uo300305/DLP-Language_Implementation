@@ -79,11 +79,6 @@ public final class IntType extends AbstractType {
     }
 
     @Override
-    public void mustBePrimitive(Locatable locatable) {
-        // Vacío
-    }
-
-    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(getInstance(), param);
     }

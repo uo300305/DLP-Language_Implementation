@@ -46,7 +46,7 @@ public abstract class AbstractType implements Type {
 
     @Override
     public void mustBeBintIn(Locatable locatable) {
-        new ErrorType("El tipo debe ser un entero o poder promocionar a entero", locatable);
+        new ErrorType("El tipo debe ser primitivo", locatable);
     }
 
     @Override
@@ -62,10 +62,5 @@ public abstract class AbstractType implements Type {
     @Override
     public Type parenthesis(List<Type> types, Locatable locatable) {
         return new ErrorType("No puede usarse '()' para pasarle parámetros a un tipo " + this, locatable);
-    }
-
-    @Override
-    public void mustBePrimitive(Locatable locatable){
-        new ErrorType("Se esperaba un tipo primitivo y fue " + this, locatable);
     }
 }

@@ -18,5 +18,4 @@ public interface Type extends ASTNode {
     Type squareBrackets(Type other, Locatable locatable);
     Type dot(String name, Locatable locatable);
     Type parenthesis(List<Type> types, Locatable locatable);
-    void mustBePrimitive(Locatable locatable);
 }

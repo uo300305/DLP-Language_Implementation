@@ -24,9 +24,6 @@ public class ErrorType extends AbstractType {
     public void mustPromote(Type other, Locatable locatable) { }
 
     @Override
-    public void mustBeBintIn(Locatable locatable) { }
-
-    @Override
     public Type arithmetic(Type other, Locatable locatable) { return this; }
 
     @Override
@@ -50,8 +47,7 @@ public class ErrorType extends AbstractType {
     @Override
     public Type parenthesis(List<Type> types, Locatable locatable) { return this; }
 
-    @Override
-    public void mustBePrimitive(Locatable locatable) {
+    public void mustBeBintIn(Locatable locatable) {
 
     }
 

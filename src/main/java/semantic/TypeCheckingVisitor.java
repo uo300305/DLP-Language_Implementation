@@ -128,7 +128,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean> {
     public Boolean visit(Log log, Type param) {
         log.getExpression().accept(this, param);
 
-        log.getExpression().getType().mustBePrimitive(log);
+        log.getExpression().getType().mustBeBintIn(log);
         return null;
     }
 

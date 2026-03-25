@@ -23,10 +23,9 @@ public class ArrayType extends AbstractType {
 
     @Override
     public Type squareBrackets(Type other, Locatable locatable) {
-        // Comprobamos que sea un int o pueda promocionar a este
-        other.mustBeBintIn(locatable);
-        // devolvemos su tipo
-        return this.elementType;
+        if(other.equals(IntType.getInstance()) || other.equals(CharType.getInstance()))
+            return this.elementType;
+        else return new ErrorType("El operador '[]' debe contener un tipo int", locatable);
     }
 
     @Override

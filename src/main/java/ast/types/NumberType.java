@@ -47,8 +47,7 @@ public final class NumberType extends AbstractType {
             new ErrorType("El tipo " + this + " no puede promocionar a " + other, locatable);
     }
 
-    @Override
-    public void mustBePrimitive(Locatable locatable) {
+    public void mustBeBintIn(Locatable locatable) {
         // Vacío
     }
 

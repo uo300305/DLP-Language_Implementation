@@ -78,11 +78,6 @@ public final class CharType extends AbstractType {
         // Vacío
     }
 
-    @Override
-    public void mustBePrimitive(Locatable locatable) {
-        // Vacío
-    }
-
     public static CharType getInstance() {
         return INSTANCE;
     }
