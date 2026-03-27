@@ -38,11 +38,8 @@ public final class IntType extends AbstractType {
 
     @Override
     public Type comparison(Type other, Locatable locatable) {
-        if(other.equals(IntType.getInstance()) || other.equals(CharType.getInstance())){
+        if(other.equals(IntType.getInstance()) || other.equals(CharType.getInstance()) || other.equals(NumberType.getInstance())){
             return this;
-        }
-        else if(other.equals(NumberType.getInstance())) {
-            return other;
         }
         else {
             return new ErrorType("El tipo " + other + " no es valido para expresiones de comparación", locatable);
@@ -74,7 +71,7 @@ public final class IntType extends AbstractType {
             new ErrorType("El tipo " + this + " no puede promocionar a " + other, locatable);
     }
 
-    public void mustBeBintIn(Locatable locatable) {
+    public void mustBeBuiltIn(Locatable locatable) {
         // Vacío
     }
 

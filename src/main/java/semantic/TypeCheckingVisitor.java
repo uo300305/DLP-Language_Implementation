@@ -128,7 +128,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean> {
     public Boolean visit(Log log, Type param) {
         log.getExpression().accept(this, param);
 
-        log.getExpression().getType().mustBeBintIn(log);
+        log.getExpression().getType().mustBeBuiltIn(log);
         return null;
     }
 
@@ -142,7 +142,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean> {
     @Override
     public Boolean visit(FieldAccess fieldAccess, Type param) {
         super.visit(fieldAccess, param);
-
         fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getField(), fieldAccess));
         return true;
     }
@@ -150,8 +149,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean> {
     @Override
     public Boolean visit(Cast cast, Type param) {
         super.visit(cast, param);
-
-        cast.getType().mustPromote(cast.getTargetType(), cast);
+        cast.setType(cast.getTargetType());
         return true;
     }
 

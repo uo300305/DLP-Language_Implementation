@@ -23,11 +23,12 @@ public class RecordType extends AbstractType {
     }
 
     public Type dot(String name, Locatable locatable) {
-        return this.fields.stream().
-                filter(field -> field.getName().equals(name))
-                .findFirst()
-                .map(RecordField::getType)
-                .orElse(new ErrorType("El campo '" + name + "' no existe en el record", locatable));
+        for(RecordField f: this.fields) {
+            if(f.getName().equals(name)){
+                return f.getType();
+            }
+        }
+        return new ErrorType("El campo '" + name + "' no existe en el record", locatable);
     }
 
     @Override

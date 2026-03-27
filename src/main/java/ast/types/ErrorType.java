@@ -47,7 +47,7 @@ public class ErrorType extends AbstractType {
     @Override
     public Type parenthesis(List<Type> types, Locatable locatable) { return this; }
 
-    public void mustBeBintIn(Locatable locatable) {
+    public void mustBeBuiltIn(Locatable locatable) {
 
     }
 

@@ -14,8 +14,9 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     // Para comprobar el ámbito de las variables
     private SymbolTable table = new SymbolTable();
+
     // Para comprobar que no haya recordFields repetidos
-    Set<String> set;
+    private Set<String> set;
 
     @Override
     public Void visit(VarDefinition varDefinition, Void param) {
@@ -30,9 +31,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
         if (!table.insert(functionDefinition))
             new ErrorType("No pueden declararse dos variables con el mismo nombre", functionDefinition);
         table.set();
-        functionDefinition.getType().accept(this, param);
-        functionDefinition.getDefinitions().forEach(d -> d.accept(this, param));
-        functionDefinition.getBody().forEach(s -> s.accept(this, param));
+        super.visit(functionDefinition, param);
         table.reset();
         return null;
     }
@@ -41,7 +40,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(Variable var, Void param) {
         Definition vd = table.find(var.getName());
         if (vd == null)
-            new ErrorType("La variable debe ser definida antes de usarse", var);
+            var.setDefinition(new VarDefinition("error",  new ErrorType("La variable debe ser definida antes de usarse", var), var.getLine(), var.getColumn()));
         else
             var.setDefinition(vd);
         return null;
@@ -51,14 +50,14 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(RecordField recordField, Void param) {
         if (!set.add(recordField.getName()))
             new ErrorType("Variables duplicadas", recordField);
-        recordField.getType().accept(this, param);
+        super.visit(recordField, param);
         return null;
     }
 
     @Override
     public Void visit(RecordType recordType, Void param) {
         set = new HashSet<>();
-        recordType.getFields().forEach(f -> f.accept(this, param));
+        super.visit(recordType, param);
         return null;
     }
 }

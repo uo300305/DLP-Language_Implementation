@@ -20,26 +20,23 @@ definition returns [List<Definition> ast = new ArrayList<>()] locals [List<VarDe
             ;
 
 variable_definition returns [List<VarDefinition> ast = new ArrayList<>()] locals [List<String> vars = new ArrayList<>()]:
-    LET='let' ID1=ID {$vars.add($ID1.text); } (',' ID2=ID
+    LET='let' ID1=ID {$vars.add($ID1.text); } (',' ID2=ID {$vars.add($ID2.text); })* ':' type ';'
     {
-        $vars.add($ID2.text); })* ':' type ';' {$vars.stream().forEach(v -> $ast.add(new VarDefinition(v, $type.ast, $LET.getLine(), $LET.getCharPositionInLine()+1)));
+        $vars.stream().forEach(v -> $ast.add(new VarDefinition(v, $type.ast, $LET.getLine(), $LET.getCharPositionInLine()+1)));
     }
     ;
 
  type returns [Type ast] locals [List<RecordField> rfs = new ArrayList<>()]:
         ft=function_type {$ast = $ft.ast; }
        | '['INT=INT_CONSTANT']' type {$ast = new ArrayType(LexerHelper.lexemeToInt($INT.text), $type.ast); }
-       | INIT='['(vd=variable_definition {
+       | INIT='['(vd=variable_definition
+            {
 
                 $vd.ast.stream().forEach(v->
                     $rfs.add(new RecordField(v.getLine(), v.getColumn(), v.getName(), v.getType()))
                 );
 
-                })+
-                ']'
-                {
-                    $ast = new RecordType($rfs);
-                }
+            })+ ']' {$ast = new RecordType($rfs);}
        | st=simple_type {$ast=$st.ast; }
        ;
 

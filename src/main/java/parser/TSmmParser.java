@@ -394,8 +394,7 @@ public class TSmmParser extends Parser {
 				match(T__9);
 				setState(90);
 				((Variable_definitionContext)_localctx).ID2 = match(ID);
-
-				        _localctx.vars.add((((Variable_definitionContext)_localctx).ID2!=null?((Variable_definitionContext)_localctx).ID2.getText():null)); 
+				_localctx.vars.add((((Variable_definitionContext)_localctx).ID2!=null?((Variable_definitionContext)_localctx).ID2.getText():null)); 
 				}
 				}
 				setState(96);
@@ -408,7 +407,8 @@ public class TSmmParser extends Parser {
 			((Variable_definitionContext)_localctx).type = type();
 			setState(99);
 			match(T__10);
-			_localctx.vars.stream().forEach(v -> _localctx.ast.add(new VarDefinition(v, ((Variable_definitionContext)_localctx).type.ast, ((Variable_definitionContext)_localctx).LET.getLine(), ((Variable_definitionContext)_localctx).LET.getCharPositionInLine()+1)));
+
+			        _localctx.vars.stream().forEach(v -> _localctx.ast.add(new VarDefinition(v, ((Variable_definitionContext)_localctx).type.ast, ((Variable_definitionContext)_localctx).LET.getLine(), ((Variable_definitionContext)_localctx).LET.getCharPositionInLine()+1)));
 			    
 			}
 		}
@@ -504,7 +504,7 @@ public class TSmmParser extends Parser {
 					                    _localctx.rfs.add(new RecordField(v.getLine(), v.getColumn(), v.getName(), v.getType()))
 					                );
 
-					                
+					            
 					}
 					}
 					setState(117); 
@@ -513,9 +513,7 @@ public class TSmmParser extends Parser {
 				} while ( _la==T__8 );
 				setState(119);
 				match(T__12);
-
-				                    ((TypeContext)_localctx).ast =  new RecordType(_localctx.rfs);
-				                
+				((TypeContext)_localctx).ast =  new RecordType(_localctx.rfs);
 				}
 				break;
 			case 4:

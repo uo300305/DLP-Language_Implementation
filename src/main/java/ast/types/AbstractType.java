@@ -45,7 +45,7 @@ public abstract class AbstractType implements Type {
     }
 
     @Override
-    public void mustBeBintIn(Locatable locatable) {
+    public void mustBeBuiltIn(Locatable locatable) {
         new ErrorType("El tipo debe ser primitivo", locatable);
     }
 

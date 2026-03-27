@@ -31,7 +31,7 @@ public final class NumberType extends AbstractType {
         if(other.equals(IntType.getInstance()) ||
                 other.equals(CharType.getInstance()) ||
                 other.equals(NumberType.getInstance())){
-            return this;
+            return IntType.getInstance();
         }
         else {
             return new ErrorType("El tipo " + other + " no es valido para expresiones de comparación", locatable);
@@ -47,7 +47,7 @@ public final class NumberType extends AbstractType {
             new ErrorType("El tipo " + this + " no puede promocionar a " + other, locatable);
     }
 
-    public void mustBeBintIn(Locatable locatable) {
+    public void mustBeBuiltIn(Locatable locatable) {
         // Vacío
     }
 

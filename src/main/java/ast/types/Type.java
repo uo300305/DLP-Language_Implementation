@@ -14,7 +14,7 @@ public interface Type extends ASTNode {
     Type logical(Type other, Locatable locatable);
     Type logical(Locatable locatable);
     void mustPromote(Type other, Locatable locatable);
-    void mustBeBintIn(Locatable locatable);
+    void mustBeBuiltIn(Locatable locatable);
     Type squareBrackets(Type other, Locatable locatable);
     Type dot(String name, Locatable locatable);
     Type parenthesis(List<Type> types, Locatable locatable);
