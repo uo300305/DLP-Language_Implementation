@@ -1,11 +1,11 @@
 package ast.types;
-import ast.common.ASTNode;
 import ast.common.AbstractLocatable;
 import semantic.Visitor;
 
 public class RecordField extends AbstractLocatable {
     private final String name;
     private final Type type;
+    private int offset;
 
     public RecordField(int line, int column, String name, Type type) {
         super(line, column);
@@ -19,6 +19,14 @@ public class RecordField extends AbstractLocatable {
 
     public Type getType() {
         return type;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 
     @Override

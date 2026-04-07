@@ -75,6 +75,11 @@ public final class CharType extends AbstractType {
         // Vacío
     }
 
+    @Override
+    public int getNumberOfBytes() {
+        return 1;
+    }
+
     public static CharType getInstance() {
         return INSTANCE;
     }

@@ -1,7 +1,6 @@
 package ast.types;
 
 import ast.common.Locatable;
-import semantic.Visitor;
 
 import java.util.List;
 
@@ -62,5 +61,11 @@ public abstract class AbstractType implements Type {
     @Override
     public Type parenthesis(List<Type> types, Locatable locatable) {
         return new ErrorType("No puede usarse '()' para pasarle parámetros a un tipo " + this, locatable);
+    }
+
+    @Override
+    public int getNumberOfBytes() {
+        // TODO es este error?
+        throw new RuntimeException("No se soporta esta operación");
     }
 }

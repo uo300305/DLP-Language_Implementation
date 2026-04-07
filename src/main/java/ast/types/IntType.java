@@ -76,6 +76,11 @@ public final class IntType extends AbstractType {
     }
 
     @Override
+    public int getNumberOfBytes() {
+        return 2;
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(getInstance(), param);
     }

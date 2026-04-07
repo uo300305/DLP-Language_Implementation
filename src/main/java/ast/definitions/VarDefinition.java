@@ -1,13 +1,22 @@
 package ast.definitions;
-import ast.common.AbstractLocatable;
 import semantic.Visitor;
 import ast.statements.Statement;
 import ast.types.Type;
 
 public class VarDefinition extends AbstractDefinition implements Statement {
 
+    private int offset;
+
     public VarDefinition(String name, Type type, int line, int column) {
         super(line, column, name, type);
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 
     @Override

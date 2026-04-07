@@ -10,6 +10,7 @@ import semantic.IdentificationVisitor;
 import semantic.LValueVisitor;
 import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
+import codegen.OffsetVisitor;
 
 public class Main {
 
@@ -36,6 +37,9 @@ public class Main {
 
 		Visitor<Type, Boolean> typeCheckingVisitor = new TypeCheckingVisitor();
 		ast.accept(typeCheckingVisitor, null);
+
+		Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
+		ast.accept(offsetVisitor, null);
 
 		// * Check errors
 		if(ErrorHandler.getInstance().anyError()){

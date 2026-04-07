@@ -2,7 +2,6 @@ package ast.definitions;
 
 import ast.common.AbstractLocatable;
 import ast.types.Type;
-import semantic.Visitor;
 
 public abstract class AbstractDefinition extends AbstractLocatable implements Definition {
 

@@ -56,6 +56,11 @@ public final class NumberType extends AbstractType {
     }
 
     @Override
+    public int getNumberOfBytes() {
+        return 4;
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(getInstance(), param);
     }

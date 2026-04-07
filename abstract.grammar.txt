@@ -1,3 +1,4 @@
+// TODO Revisar gramática para la entrega final
 A: expression.type = Type
    statement.h = Type
 G:

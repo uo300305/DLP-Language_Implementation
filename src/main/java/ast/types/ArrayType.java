@@ -1,7 +1,6 @@
 package ast.types;
 
 import ast.common.Locatable;
-import ast.expressions.Expression;
 import semantic.Visitor;
 
 public class ArrayType extends AbstractType {
@@ -26,6 +25,11 @@ public class ArrayType extends AbstractType {
         if(other.equals(IntType.getInstance()) || other.equals(CharType.getInstance()))
             return this.elementType;
         else return new ErrorType("El operador '[]' debe contener un tipo int", locatable);
+    }
+
+    @Override
+    public int getNumberOfBytes() {
+        return getElementType().getNumberOfBytes()*getDimension();
     }
 
     @Override

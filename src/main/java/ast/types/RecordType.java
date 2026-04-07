@@ -32,6 +32,11 @@ public class RecordType extends AbstractType {
     }
 
     @Override
+    public int getNumberOfBytes() {
+        return fields.stream().map(f -> f.getType().getNumberOfBytes()).reduce(0, Integer::sum);
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(this, param);
     }
