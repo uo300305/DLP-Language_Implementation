@@ -24,4 +24,5 @@ public class Assignment extends AbstractStatement {
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(this, param);
     }
+
 }

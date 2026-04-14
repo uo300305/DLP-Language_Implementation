@@ -81,6 +81,11 @@ public final class IntType extends AbstractType {
     }
 
     @Override
+    public char suffix() {
+        return 'i';
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> visitor, PT param) {
         return visitor.visit(getInstance(), param);
     }

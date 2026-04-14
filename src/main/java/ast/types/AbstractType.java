@@ -7,6 +7,11 @@ import java.util.List;
 public abstract class AbstractType implements Type {
 
     @Override
+    public char suffix() {
+        throw new RuntimeException("El tipo " + this + " no soporta esta operación");
+    }
+
+    @Override
     public void mustBeLogical(Locatable locatable) {
         new ErrorType("Se esperaba un típo lógico", locatable);
     }

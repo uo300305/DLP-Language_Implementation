@@ -1,5 +1,6 @@
 package ast.expressions;
 import ast.definitions.Definition;
+import ast.definitions.VarDefinition;
 import semantic.Visitor;
 
 public class Variable extends AbstractExpression {

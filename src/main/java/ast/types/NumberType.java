@@ -67,6 +67,11 @@ public final class NumberType extends AbstractType {
 
     @Override
     public String toString() {
-        return "number";
+        return "real";
+    }
+
+    @Override
+    public char suffix() {
+        return 'f';
     }
 }

@@ -1,55 +1,46 @@
-import ast.types.Type;
-import org.antlr.v4.runtime.*;
-import introspector.model.IntrospectorModel;
-import introspector.view.IntrospectorView;
+
 import ast.common.ASTNode;
 import ast.common.ErrorHandler;
-import parser.TSmmLexer;
-import parser.TSmmParser;
+import codegen.ExecuteVisitor;
+import codegen.OffsetVisitor;
+import org.antlr.v4.runtime.*;
+import codegen.CodeGenerator;
+
+import parser.*;
 import semantic.IdentificationVisitor;
 import semantic.LValueVisitor;
 import semantic.TypeCheckingVisitor;
-import semantic.Visitor;
-import codegen.OffsetVisitor;
 
 public class Main {
 
-	public static void main(String... args) throws Exception {
-		   if (args.length<1) {
-		        System.err.println("Please, pass me the input file.");
-		        return;
-		    }
-		   		 			
-		 // create a lexer that feeds off of input CharStream
-		CharStream input = CharStreams.fromFileName(args[0]);
-		TSmmLexer lexer = new TSmmLexer(input);
+    public static void main(String... args) throws Exception {
+        if (args.length < 2) {
+            System.err.println("Please, specify the input and output files.");
+            return;
+        }
 
-		// create a parser that feeds off the tokens buffer
-		CommonTokenStream tokens = new CommonTokenStream(lexer); 
-		TSmmParser parser = new TSmmParser(tokens);
-		ASTNode ast = parser.program().ast;
+        // create a lexer that feeds off of input CharStream
+        CharStream input = CharStreams.fromFileName(args[0]);
+        TSmmLexer lexer = new TSmmLexer(input);
 
-		Visitor<Void, Void> lvalueVisitor= new LValueVisitor();
-		ast.accept(lvalueVisitor, null);
+        // create a parser that feeds off the tokens buffer
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        TSmmParser parser = new TSmmParser(tokens);
+        ASTNode ast = parser.program().ast;
 
-		Visitor<Void, Void> identificationVisitor= new IdentificationVisitor();
-		ast.accept(identificationVisitor, null);
-
-		Visitor<Type, Boolean> typeCheckingVisitor = new TypeCheckingVisitor();
-		ast.accept(typeCheckingVisitor, null);
-
-		Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
-		ast.accept(offsetVisitor, null);
-
-		// * Check errors
-		if(ErrorHandler.getInstance().anyError()){
-			// * Show errors
-			ErrorHandler.getInstance().showErrors(System.err);
-		}
-		else{
-			// * The AST is shown
-			IntrospectorModel model=new IntrospectorModel("Program", ast);
-			new IntrospectorView("Introspector", model);
-		}
-	}
+        ast.accept(new LValueVisitor(), null);
+        ast.accept(new IdentificationVisitor(), null);
+        ast.accept(new TypeCheckingVisitor(), null);
+        // * Check errors
+        if (ErrorHandler.getInstance().anyError()) {
+            // * Show errors
+            ErrorHandler.getInstance().showErrors(System.err);
+        } else {
+            // * The AST is shown
+            ast.accept(new OffsetVisitor(), null);
+            ast.accept(new ExecuteVisitor(new CodeGenerator(args[1], args[0])), null);
+//            IntrospectorModel model = new IntrospectorModel("Program", ast);
+//            new IntrospectorView("Introspector", model);
+        }
+    }
 }

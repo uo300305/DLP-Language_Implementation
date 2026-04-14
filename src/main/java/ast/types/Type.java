@@ -5,6 +5,7 @@ import ast.common.Locatable;
 import java.util.List;
 
 public interface Type extends ASTNode {
+
     // Los métodos mustTo son aquellos que solo comprueban
     // Los otros comparan y tipan
     void mustBeLogical(Locatable locatable);
@@ -20,4 +21,5 @@ public interface Type extends ASTNode {
     Type parenthesis(List<Type> types, Locatable locatable);
 
     int getNumberOfBytes();
+    char suffix();
 }
