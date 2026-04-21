@@ -3,11 +3,14 @@ package codegen;
 import ast.expressions.*;
 
 public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
-    private final AddressVisitor address;
+    private AddressVisitor address;
 
-    ValueVisitor(CodeGenerator cg, AddressVisitor address){
+    ValueVisitor(CodeGenerator cg){
         super(cg);
-        this.address = address;
+    }
+
+    public void setAddress(AddressVisitor av) {
+        this. address = av;
     }
 
     @Override
@@ -83,12 +86,29 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
+    public Void visit(FieldAccess fieldAccess, Void param) {
+        fieldAccess.accept(address, param);
+        cg.load(fieldAccess.getType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(ArrayAccess arrayAccess, Void param) {
+        arrayAccess.accept(address, param);
+        cg.load(arrayAccess.getType());
+
+        return null;
+    }
+
+    @Override
     public Void visit(IntLiteral intLiteral, Void param) {
         String s = String.valueOf(intLiteral.getValue());
         cg.push(intLiteral.getType(), s);
         return null;
     }
 
+    @Override
     public Void visit(CharLiteral charLiteral, Void param) {
         String s = String.valueOf((int)charLiteral.getValue());
         cg.push(charLiteral.getType(), s);

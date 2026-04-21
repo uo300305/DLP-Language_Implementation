@@ -31,15 +31,31 @@ public class CodeGenerator {
         out.flush();
     }
 
-    public void label(String id) {
-        out.println();
-        out.println(" " + id + ":");
-        out.flush();
-        labels++;
-    }
-
     public void enter(int bytes) {
         out.println("\tenter\t" + bytes);
+        out.flush();
+    }
+
+    /**
+     * Devolvemos una label para los saltos
+     * @return label
+     */
+    public String getLabel() {
+        return "label" + labels++;
+    }
+
+    public void jmp(String label) {
+        out.println("\tjmp\t" + label);
+        out.flush();
+    }
+
+    public void jz(String label) {
+        out.println("\tjz\t" + label);
+        out.flush();
+    }
+
+    public void jnz(String label) {
+        out.println("\tjnz\t" + label);
         out.flush();
     }
 
@@ -61,6 +77,7 @@ public class CodeGenerator {
         out.flush();
     }
 
+    // TODO ¿Esto funcionas?
     public void call(String name) {
         out.println("\tcall " + name);
         out.flush();
@@ -371,7 +388,7 @@ public class CodeGenerator {
         out.flush();
     }
 
-    public void action(String action) {
+    public void comment(String action) {
         out.println("\t' * " + action);
         out.flush();
     }
@@ -379,5 +396,11 @@ public class CodeGenerator {
     public void parameters() {
         out.println("\t' * Parameters");
         out.println("\t' * Local variables");
+    }
+
+    public void label(String id) {
+        out.println();
+        out.println(" " + id + ":");
+        out.flush();
     }
 }

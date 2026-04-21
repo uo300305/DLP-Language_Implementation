@@ -1,37 +1,45 @@
-Generar el codigo MAPL para
----------------- Programs
----------------- Input statements
----------------- Print statements
----------------- Literals
----------------- Variables
----------------- Assignments
----------------- Arithmetic, comparison and logical expressions
----------------- VarDefinitions (global / local)
----------------- FunDefinitions
----------------- Casts
+Generar codigo para:
+- Indexing
+- FieldAccess
+- While statements
+- If statements
 
+Pendiente->
+execute[[if: start -> exp1->estmt2*stmt3*]]();
+String else = cg.getLValue();
+String end = ...
+Value[[expr]]();
+cg.convertTo();
+<jz> else
+stamt2*.foreach(s->execute...)
+<jump> end
+<else>
+// ejecutar cuerpo else
+end<:> //IMPORTANTE
 
+Hechos->
+ACCESO A ARRAY
+address [[ArrayAccess: expr1 -> exp2 exp3]]();
+<push>address[[expr2]]();
+<push>value[[expr3]]();
+cg.convertTo(exp3.type, IntType.getInstancce());
+<pushi> expression1.type.getNumberOfBytes();
+<muli>
+<addi>
 
-execute [[ Assigment: statement -> expr1 expre2]]
-    address[[ expr1 ]]()
-    value [[ expr2 ]]()
-    cg.convertTo(expr2.type,expr1.type)
-    <store> expr1.type.suffix()
+ACCESO A CAMPO (FieldAccess)
+address[[FieldAccess: exp1 -> exp2 ID]]();
+address[[apr2]]();
+<pushi> exp2.type.getField(ID).offset //O exp1.getName()
+<addi>
 
-address[[Variable:expr->ID]]()
-    (expr.description.scope==0)
-    <pusha> expr.description.offset
-    else
-    <pushi> expr.definition.ofset
-    <push exp>
-    <addr>
-
-Execute [[FuncDef.dep -> type.stut*]]
-    def.name <:>
-    <*parameters>
-    for (vd par: type.parameters)
-    execute [[<param>]]()
-    ....
-    <enter> def.byteSize // O comose llame
-    Ejecutar los statements
-    ret //Pa tarminar
+execute[[While: stmt1 -> exp stmnt2*]]();
+String cond = cg.getLabel();
+String end = cg.getLabel();
+cond <:>;
+value [[expr]]();
+cg.convertTo(expr.type, IntType.getInstance);
+<jz> end
+'stmnt2'.foreach(s->execute([[s]]());
+<jmp> cond
+end <:>

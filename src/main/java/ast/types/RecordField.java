@@ -36,6 +36,6 @@ public class RecordField extends AbstractLocatable {
 
     @Override
     public String toString() {
-        return name + ": " + type;
+        return "Field[name:" + name + ",type:" + type + " offset:" + offset + "]";
     }
 }

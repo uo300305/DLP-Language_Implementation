@@ -4,11 +4,9 @@ import ast.common.Program;
 import ast.definitions.Definition;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VarDefinition;
-import ast.statements.Assignment;
-import ast.statements.Input;
-import ast.statements.Log;
-import ast.statements.Statement;
+import ast.statements.*;
 import ast.types.FunctionType;
+import ast.types.IntType;
 
 public class ExecuteVisitor extends AbstractCGVisitor<Void, Void> {
     private final AddressVisitor address;
@@ -17,7 +15,10 @@ public class ExecuteVisitor extends AbstractCGVisitor<Void, Void> {
     public ExecuteVisitor(CodeGenerator cg) {
         super(cg);
         this.address=new AddressVisitor(cg);
-        this.value= new ValueVisitor(cg, address);
+        this.value= new ValueVisitor(cg);
+
+        this.address.setValue(value);
+        this.value.setAddress(address);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class ExecuteVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Assignment assignment, Void param) {
         cg.line(assignment.getLine());
-        cg.action("Assignment");
+        cg.comment("Assignment");
         assignment.getLeft().accept(address, param);
         assignment.getRight().accept(value, param);
         cg.convertTo(assignment.getRight().getType(), assignment.getLeft().getType());
@@ -101,7 +102,7 @@ public class ExecuteVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Input input, Void param) {
         cg.line(input.getLine());
-        cg.action("Read");
+        cg.comment("Read");
         input.getExpression().accept(address, param);
         cg.in(input.getExpression().getType());
         cg.store(input.getExpression().getType());
@@ -112,9 +113,53 @@ public class ExecuteVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Log log, Void param) {
         cg.line(log.getLine());
-        cg.action("Write");
+        cg.comment("Write");
         log.getExpression().accept(value, param);
         cg.out(log.getExpression().getType());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(While w, Void param) {
+        cg.line(w.getLine());
+        cg.comment("While");
+        String cond = cg.getLabel();
+        String end = cg.getLabel();
+
+        cg.line(w.getLine());
+        cg.label(cond);
+        w.getCondition().accept(value, param);
+        cg.convertTo(w.getCondition().getType(), IntType.getInstance());
+        cg.jz(end);
+        cg.comment("While body");
+        w.getBody().forEach(s -> s.accept(this, param));
+        cg.jmp(cond);
+        cg.label(end);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse i, Void param) {
+        cg.line(i.getLine());
+        cg.comment("If");
+
+        String els = cg.getLabel();
+        String end = cg.getLabel();
+
+        cg.line(i.getLine());
+        i.getCondition().accept(value, param);
+        cg.convertTo(i.getCondition().getType(), IntType.getInstance());
+        cg.jz(els);
+        cg.comment("If body");
+        i.getIfBody().forEach(s -> s.accept(this, param));
+        cg.jmp(end);
+        cg.label(els);
+        cg.comment("else body");
+        i.getElseBody().forEach(s -> s.accept(this, param));
+        cg.label(end);
+
 
         return null;
     }

@@ -4,6 +4,7 @@ import ast.common.Locatable;
 import semantic.Visitor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecordType extends AbstractType {
 
@@ -31,6 +32,17 @@ public class RecordType extends AbstractType {
         return new ErrorType("El campo '" + name + "' no existe en el record", locatable);
     }
 
+    public RecordField getField(String name) {
+        for(RecordField f: this.fields) {
+            if(f.getName().equals(name)){
+                return f;
+            }
+        }
+
+        // Nunca debería ejecutarse
+        return null;
+    }
+
     @Override
     public int getNumberOfBytes() {
         return fields.stream().map(f -> f.getType().getNumberOfBytes()).reduce(0, Integer::sum);
@@ -43,6 +55,9 @@ public class RecordType extends AbstractType {
 
     @Override
     public String toString() {
-        return "record";
+        String fields = this.fields.stream()
+                .map(RecordField::toString)
+                .collect(Collectors.joining(", "));
+        return "RecordType[fields:[" + fields + "]]";
     }
 }
