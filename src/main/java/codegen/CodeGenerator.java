@@ -73,13 +73,12 @@ public class CodeGenerator {
     public void callMain() {
         out.println();
         out.println("' Invocation to the main function");
-        out.println("call main");
+        out.println("call\tmain");
         out.flush();
     }
 
-    // TODO ¿Esto funcionas?
     public void call(String name) {
-        out.println("\tcall " + name);
+        out.println("\tcall\t" + name);
         out.flush();
     }
 
@@ -115,6 +114,11 @@ public class CodeGenerator {
         out.flush();
     }
 
+    public void pop(Type type) {
+        out.println("\tpop"+type.suffix());
+        out.flush();
+    }
+
     /**
      *
      * @param type
@@ -136,7 +140,6 @@ public class CodeGenerator {
 
 
     public void convertTo(Type from, Type to) {
-
         if (from.equals(to)) return;
 
         if (to.equals(CharType.getInstance())) {
@@ -395,6 +398,9 @@ public class CodeGenerator {
 
     public void parameters() {
         out.println("\t' * Parameters");
+    }
+
+    public void localVariables() {
         out.println("\t' * Local variables");
     }
 

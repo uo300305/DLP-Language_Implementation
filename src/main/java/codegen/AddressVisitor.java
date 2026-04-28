@@ -18,7 +18,6 @@ public class AddressVisitor extends AbstractCGVisitor<Void, Void> {
         this.value = vv;
     }
 
-    //TODO: Huele mal
     @Override
     public Void visit(Variable var, Void param) {
         if (var.getDefinition() instanceof VarDefinition vd) {
@@ -53,8 +52,8 @@ public class AddressVisitor extends AbstractCGVisitor<Void, Void> {
         RecordType rt = (RecordType)fa.getExpression().getType();
 
         fa.getExpression().accept(this, param);
-        cg.push(fa.getType(), String.valueOf(rt.getField(fa.getField()).getOffset()));
-        cg.add(fa.getType());
+        cg.push(IntType.getInstance(), String.valueOf(rt.getField(fa.getField()).getOffset()));
+        cg.add(IntType.getInstance());
 
         return null;
     }

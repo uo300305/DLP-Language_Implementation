@@ -1,6 +1,8 @@
 package codegen;
 
 import ast.expressions.*;
+import ast.types.FunctionType;
+import ast.types.Type;
 
 public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
     private AddressVisitor address;
@@ -118,6 +120,19 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(NumberLiteral numberLiteral, Void param) {
         String s = String.valueOf(numberLiteral.getValue());
         cg.push(numberLiteral.getType(), s);
+        return null;
+    }
+
+
+    public Void visit(FunctionCall functionCall, Void param) {
+        for(int i = 0; i < functionCall.getArguments().size(); i++) {
+            functionCall.getArguments().get(i).accept(this, param);
+            Type to = ((FunctionType)functionCall.getName().getType()).getParameters().get(i).getType();
+            cg.convertTo(functionCall.getArguments().get(i).getType(), to);
+        }
+
+        cg.call(functionCall.getName().getName());
+
         return null;
     }
 }
