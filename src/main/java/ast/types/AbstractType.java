@@ -70,7 +70,6 @@ public abstract class AbstractType implements Type {
 
     @Override
     public int getNumberOfBytes() {
-        // TODO es este error?
         throw new RuntimeException("No se soporta esta operación");
     }
 }

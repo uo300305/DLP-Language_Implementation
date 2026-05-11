@@ -14,8 +14,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     // Para comprobar el ámbito de las variables
     private SymbolTable table = new SymbolTable();
-
-    // TODO está bien si tengo record hijo de record?
+    
     // Para comprobar que no haya recordFields repetidos
     private Set<String> set;
 

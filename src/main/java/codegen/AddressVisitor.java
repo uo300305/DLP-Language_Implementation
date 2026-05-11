@@ -33,7 +33,6 @@ public class AddressVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    //TODO: Comentarios
     @Override
     public Void visit(ArrayAccess aa, Void param) {
         aa.getArray().accept(this, param);
@@ -46,7 +45,6 @@ public class AddressVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    // TODO: Comentarios
     @Override
     public Void visit(FieldAccess fa, Void param) {
         RecordType rt = (RecordType)fa.getExpression().getType();

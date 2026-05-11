@@ -44,7 +44,6 @@ public class ExecuteVisitor extends AbstractCGVisitor<FunctionDefinition, Void> 
         return null;
     }
 
-    // TODO revisar
     @Override
     public Void visit(FunctionDefinition functionDefinition, FunctionDefinition param) {
         cg.line(functionDefinition.getLine());
