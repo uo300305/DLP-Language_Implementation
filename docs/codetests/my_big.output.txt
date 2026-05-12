@@ -1,4 +1,4 @@
-#source	"big.input.txt"
+#source	"docs/codetests/big.input.txt"
 
 	' * RecordType[fields:[Field[name:integer,type:int offset:0], Field[name:character,type:char offset:2]]] pair (offset 0)
 	' * ArrayType[of:RecordType[fields:[Field[name:employees,type:ArrayType[of:RecordType[fields:[Field[name:age,type:int offset:0]]],size:2] offset:0]]],size:2] acme (offset 3)

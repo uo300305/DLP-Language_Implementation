@@ -32,8 +32,7 @@ R:
     (8) expression1.type = expression2.type.squareBraquets(expressio3.type, expression1)
     (9) expression1.type = expression2.type.dot(string, expression1)
     (10) expression1.type = variable.type.parenthesis(expression2*.type, expression1)
-    (11) expression2.type.mustPromote(type, expression1)
-         expression1.type = type
+    (11) expression1.type = type
     (12) expression1.type = expression2.type.arithmetic(expression1)
     (13) expression1.type = expression2.type.logical(expression1)
     (14) expression2.type.mustPromote(expression1.type, statement)

@@ -149,7 +149,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean> {
     @Override
     public Boolean visit(Cast cast, Type param) {
         super.visit(cast, param);
-        cast.getExpression().getType().mustPromote(cast.getTargetType(), cast);
         cast.setType(cast.getTargetType());
         return true;
     }

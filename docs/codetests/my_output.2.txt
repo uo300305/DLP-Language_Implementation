@@ -1,4 +1,4 @@
-#source	"input.2.txt"
+#source	"docs/codetests/input.2.txt"
 
 	' * int i (offset 0)
 	' * int n (offset 2)
