@@ -17,7 +17,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     private SymbolTable table = new SymbolTable();
     
     // Para comprobar que no haya recordFields repetidos
-    private Stack<Set<String>> set;
+    private Stack<Set<String>> set = new Stack<>();
 
     @Override
     public Void visit(VarDefinition varDefinition, Void param) {
