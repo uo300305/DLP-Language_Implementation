@@ -9,6 +9,7 @@ import symboltable.SymbolTable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
@@ -16,7 +17,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     private SymbolTable table = new SymbolTable();
     
     // Para comprobar que no haya recordFields repetidos
-    private Set<String> set;
+    private Stack<Set<String>> set;
 
     @Override
     public Void visit(VarDefinition varDefinition, Void param) {
@@ -48,7 +49,7 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(RecordField recordField, Void param) {
-        if (!set.add(recordField.getName()))
+        if (!set.peek().add(recordField.getName()))
             new ErrorType("Variables duplicadas", recordField);
         super.visit(recordField, param);
         return null;
@@ -56,8 +57,9 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(RecordType recordType, Void param) {
-        set = new HashSet<>();
+        set.push(new HashSet<>());
         super.visit(recordType, param);
+        set.pop();
         return null;
     }
 }
