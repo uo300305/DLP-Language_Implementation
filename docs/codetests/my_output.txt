@@ -1,11 +1,11 @@
-#source	"input.txt"
+#source	"docs/codetests/input.txt"
 
 	' * char c (offset 0)
 	' * int i (offset 1)
 	' * real r (offset 3)
 
 ' Invocation to the main function
-call main
+call	main
 halt
 
 #line	5

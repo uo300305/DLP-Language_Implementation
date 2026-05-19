@@ -1,9 +1,9 @@
-#source	"input.1.txt"
+#source	"docs/codetests/input.1.txt"
 
 	' * ArrayType[of:real,size:10] v (offset 0)
 
 ' Invocation to the main function
-call main
+call	main
 halt
 
 #line	4

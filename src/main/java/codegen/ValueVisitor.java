@@ -15,6 +15,11 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         this. address = av;
     }
 
+    /**
+     * void value [Cast -> expression1 -> type expression2]():
+     *     value[[expression2]]()
+     *     cg.convertTo(expression2.type, type)
+     */
     @Override
     public Void visit(Cast cast, Void param) {
         cast.getExpression().accept(this, param);
@@ -23,6 +28,14 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [Arithmetic: expression1 -> expression2 op expression3]():
+     *     value [[expression2]]()
+     *     cg.convertTo(expression2.type, expression1.type)
+     *     value [[expression3]]()
+     *     convertTo(expression2.type, expression1.type)
+     *     cg.arithmetic(expression1.type.suffix, op)
+     */
     @Override
     public Void visit(Arithmetic arithmetic, Void param) {
         arithmetic.getLeft().accept(this, param);
@@ -36,6 +49,14 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[Comparison: expression1 -> expression2 op expression3]]():
+     *     value [[expression2]]()
+     *     cg.convertTo(expression2.type, expression1.type)
+     *     value [[expression3]]()
+     *     convertTo(expression2.type, expression1.type)
+     *     cg.comparison(expression1.type.suffix, op)
+     */
     @Override
     public Void visit(Comparison comparison, Void param) {
         comparison.getLeft().accept(this, param);
@@ -49,6 +70,14 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[Logical: expression1 -> expression2 op expression3]]():
+     *     value [[expression2]]()
+     *     cg.convertTo(expression2.type, expression1.type)
+     *     value [[expression3]]()
+     *     convertTo(expression2.type, expression1.type)
+     *     cg.logical(expression1.type.suffix, op)
+     */
     @Override
     public Void visit(Logical logical, Void param) {
         logical.getLeft().accept(this, param);
@@ -62,6 +91,12 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [UnaryMinus: expression1 -> expression2]]():
+     *     <push> unaryMinus.type.suffix 0
+     *     value [[expression]]()
+     *     <sub> unaryMinus.type.suffix
+     */
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
         cg.push(unaryMinus.getType(), "0");
@@ -71,6 +106,11 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [UnaryNot: expression1 -> expression2]():
+     *     value [[expression]]
+     *     <not>
+     */
     @Override
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.getExpression().accept(this, param);
@@ -79,6 +119,11 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[Variable: expression -> ID]]():
+     *     address [[expression]]()
+     *     <load> variable.type.suffix
+     */
     @Override
     public Void visit(Variable var, Void param) {
         var.accept(address, param);
@@ -87,6 +132,11 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[FieldAccess: expression1 -> expression1 ID]]():
+     *     address [[expression1]]()
+     *     <load> fieldAccess.type.suffix
+     */
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.accept(address, param);
@@ -95,6 +145,11 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[ArrayAccess: expression1 -> expression2 expression3]]():
+     *     address [[expression1]]()
+     *     <load> arrayAccess.type.suffix
+     */
     @Override
     public Void visit(ArrayAccess arrayAccess, Void param) {
         arrayAccess.accept(address, param);
@@ -103,6 +158,10 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[IntLiteral: expression -> INT_CONSTANT]]():
+     *     <pushi> INT_CONSTANT
+     */
     @Override
     public Void visit(IntLiteral intLiteral, Void param) {
         String s = String.valueOf(intLiteral.getValue());
@@ -110,6 +169,10 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[CharLiteral: expression -> CHAR_CONSTANT]]():
+     *     <pushb> CHAR_CONSTANT
+     */
     @Override
     public Void visit(CharLiteral charLiteral, Void param) {
         String s = String.valueOf((int)charLiteral.getValue());
@@ -117,6 +180,10 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
+    /**
+     * void value [[NumberLiteral: expression -> REAL_CONSTANT]]():
+     *     <pushf> REAL_CONSTANT
+     */
     public Void visit(NumberLiteral numberLiteral, Void param) {
         String s = String.valueOf(numberLiteral.getValue());
         cg.push(numberLiteral.getType(), s);
@@ -124,6 +191,14 @@ public class ValueVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
 
+    /**
+     * void value [FunctionCall: expression1 -> expression2 expression3*]]():
+     *     for(int i = 0; i<expression3*.size(); i++){
+     *         value [[expression3*.get(i)]]()
+     *         cg.convertTo(expression3*.get(i).type, variable.type.getParameters.get(i).getType())
+     *     }
+     *     <call> expression2.name>
+     */
     public Void visit(FunctionCall functionCall, Void param) {
         for(int i = 0; i < functionCall.getArguments().size(); i++) {
             functionCall.getArguments().get(i).accept(this, param);
