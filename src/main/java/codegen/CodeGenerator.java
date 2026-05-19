@@ -119,20 +119,12 @@ public class CodeGenerator {
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void load(Type type) {
         out.println("\tload"+type.suffix());
         // Añadir flush al final de cada comando
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void store(Type type) {
         out.println("\tstore"+type.suffix());
         out.flush();
@@ -195,50 +187,30 @@ public class CodeGenerator {
         }
     }
 
-    /**
-     *
-     * @param type
-     */
     public void add(Type type) {
         checkNotChar(type);
         out.println("\tadd"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void sub(Type type) {
         checkNotChar(type);
         out.println("\tsub"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void mul(Type type) {
         checkNotChar(type);
         out.println("\tmul"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void div(Type type) {
         checkNotChar(type);
         out.println("\tdiv"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void mod(Type type) {
         checkNotChar(type);
         out.println("\tmod"+type.suffix());
@@ -261,60 +233,36 @@ public class CodeGenerator {
         }
     }
 
-    /**
-     *
-     * @param type
-     */
     public void gt(Type type) {
         checkNotChar(type);
         out.println("\tgt"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void lt(Type type) {
         checkNotChar(type);
         out.println("\tlt"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void ge(Type type) {
         checkNotChar(type);
         out.println("\tge"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void le(Type type) {
         checkNotChar(type);
         out.println("\tle"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void eq(Type type) {
         checkNotChar(type);
         out.println("\teq"+type.suffix());
         out.flush();
     }
 
-    /**
-     *
-     * @param type
-     */
     public void ne(Type type) {
         checkNotChar(type);
         out.println("\tne"+type.suffix());
@@ -334,17 +282,11 @@ public class CodeGenerator {
         }
     }
 
-    /**
-     *
-     */
     public void and() {
         out.println("\tand");
         out.flush();
     }
 
-    /**
-     *
-     */
     public void or() {
         out.println("\tor");
         out.flush();
@@ -361,9 +303,6 @@ public class CodeGenerator {
         out.flush();
     }
 
-    /**
-     *
-     */
     public void not() {
         out.println("\tnot");
         out.flush();

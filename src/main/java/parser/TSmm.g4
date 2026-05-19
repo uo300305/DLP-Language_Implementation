@@ -71,7 +71,6 @@ body returns [List<Statement> ast = new ArrayList<>()]:
     | s1=statement {$ast.addAll($s1.ast); }
     ;
 
-// Mejor antes los datos o la posicion?
 expression returns [Expression ast] locals [List<Expression> exps = new ArrayList<>()]:
             INT_CONSTANT {$ast = new IntLiteral(LexerHelper.lexemeToInt($INT_CONSTANT.text), $INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1); }
             | CHAR_CONSTANT {$ast = new CharLiteral(LexerHelper.lexemeToChar($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1); }

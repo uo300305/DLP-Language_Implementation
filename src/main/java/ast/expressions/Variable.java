@@ -5,7 +5,7 @@ import semantic.Visitor;
 
 public class Variable extends AbstractExpression {
     private final String name;
-    private Definition definition; // añadir esto
+    private Definition definition;
 
     public Variable(String name, int line, int column) {
         super(line, column);
