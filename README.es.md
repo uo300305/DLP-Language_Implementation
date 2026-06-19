@@ -106,7 +106,7 @@ flowchart LR
 
 ## Diseño del AST
 
-![UML del AST](UML.png)
+![UML del AST](UML.svg)
 
 ## Estructura de archivos del proyecto
 
