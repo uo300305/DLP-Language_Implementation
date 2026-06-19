@@ -109,7 +109,7 @@ flowchart LR
 
 ## AST Design
 
-![UML del AST](UML.png)
+![UML del AST](UML.svg)
 
 ## Project Structure
 
